@@ -1,0 +1,142 @@
+/* app.css */
+
+/* Global */
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fdfdfd;
+}
+
+/* Liens */
+a {
+  text-decoration: none;
+}
+
+/* Hero */
+.hero {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background-color: #FFD700; /* couleur principale du logo */
+}
+
+.hero-text {
+  position: relative;
+  color: #fff;
+  text-align: center;
+  z-index: 1;
+}
+
+.hero-text h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.hero-text p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.hero-text .btn {
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+}
+
+/* Produits */
+.container h2 {
+  color: #333;
+}
+
+.card {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  background-color: #fff;
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-body {
+  padding: 15px;
+  text-align: center;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.card-price {
+  color: #e63946; /* couleur secondaire du logo */
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #FFD700; /* couleur principale du logo */
+}
+
+.navbar .nav-link {
+  color: #333;
+  font-weight: 500;
+}
+
+.navbar .nav-link:hover {
+  color: #e63946; /* couleur secondaire du logo */
+}
+
+/* Footer */
+footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+  margin-top: 50px;
+}
+
+/* Responsivité */
+@media (max-width: 768px) {
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+
+  .hero-text p {
+    font-size: 1rem;
+  }
+
+  .card img {
+    height: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-text h1 {
+    font-size: 1.5rem;
+  }
+
+  .hero-text p {
+    font-size: 0.9rem;
+  }
+
+  .card img {
+    height: 150px;
+  }
+}

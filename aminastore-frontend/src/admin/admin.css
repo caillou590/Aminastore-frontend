@@ -1,0 +1,125 @@
+/* src/admin/admin.css */
+
+/* Layout général */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* Sidebar */
+.admin-sidebar {
+  width: 250px;
+  background-color: #212529;
+  color: #fff;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.admin-sidebar ul {
+  padding: 0;
+  margin: 0;
+}
+
+.admin-sidebar li {
+  list-style: none;
+}
+
+.admin-sidebar li a {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.admin-sidebar li a:hover,
+.admin-sidebar li.active a {
+  background-color: #343a40;
+  border-left: 4px solid #ffd700; /* couleur principale du logo */
+}
+
+.admin-sidebar li a svg {
+  font-size: 1.2rem;
+}
+
+/* Header */
+.admin-header {
+  height: 60px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: fixed;
+  top: 0;
+  left: 250px;
+  right: 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 900;
+}
+
+.admin-header .toggle-sidebar {
+  display: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Main content */
+.admin-main {
+  margin-left: 250px;
+  padding: 80px 20px 20px 20px; /* top + content padding */
+  flex-grow: 1;
+  transition: margin-left 0.3s ease;
+}
+
+/* Footer */
+.admin-footer {
+  text-align: center;
+  padding: 15px;
+  background-color: #fff;
+  color: #6c757d;
+  border-top: 1px solid #dee2e6;
+  position: fixed;
+  bottom: 0;
+  left: 250px;
+  right: 0;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .admin-sidebar {
+    transform: translateX(-100%);
+    position: fixed;
+  }
+
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .admin-header {
+    left: 0;
+  }
+
+  .admin-header .toggle-sidebar {
+    display: block;
+  }
+
+  .admin-main {
+    margin-left: 0;
+    padding-top: 80px;
+  }
+
+  .admin-footer {
+    left: 0;
+    right: 0;
+  }
+}
