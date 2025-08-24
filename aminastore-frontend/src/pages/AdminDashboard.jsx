@@ -1,72 +1,118 @@
-import { useEffect, useState } from "react";
-import api from "../api";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./app.css";
 
-const STATUTS = ["en attente", "validé", "en préparation", "en cours de livraison", "livré", "annulé"];
+const Dashboard = () => {
+  const [products, setProducts] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // ✅ gérer sidebar mobile
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    price: "",
+    category: "",
+    stock: "",
+    sizes: "",
+    imageUrl: "",
+    videoUrl: ""
+  });
 
-export default function AdminDashboard() {
-  const [orders, setOrders] = useState([]);
-  const [err, setErr] = useState("");
+  // Charger produits
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/products")
+      .then(res => setProducts(res.data))
+      .catch(err => console.error(err));
+  }, []);
 
-  const fetchOrders = async () => {
-    try {
-      const res = await api.get("/orders", { params: { limit: 20 } }); // nécessite token admin
-      setOrders(res.data.orders || []);
-    } catch (e) {
-      setErr(e.response?.data?.message || "Accès refusé (admin requis).");
-    }
+  // Gérer inputs
+  const handleChange = (e) => {
+    setFormData({...formData, [e.target.name]: e.target.value });
   };
 
-  const updateStatus = async (id, status) => {
-    try {
-      await api.put(`/orders/${id}/status`, { status });
-      await fetchOrders();
-    } catch (e) {
-      alert(e.response?.data?.message || "Erreur lors de la mise à jour du statut");
-    }
+  // Ajouter produit
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios.post("http://localhost:5000/api/products", formData)
+      .then(res => {
+        setProducts([...products, res.data]);
+        setFormData({
+          name: "",
+          description: "",
+          price: "",
+          category: "",
+          stock: "",
+          sizes: "",
+          imageUrl: "",
+          videoUrl: ""
+        });
+      })
+      .catch(err => console.error(err));
   };
 
-  useEffect(() => { fetchOrders(); }, []);
+  // Supprimer produit
+  const handleDelete = (id) => {
+    axios.delete(`http://localhost:5000/api/products/${id}`)
+      .then(() => {
+        setProducts(products.filter(p => p._id !== id));
+      })
+      .catch(err => console.error(err));
+  };
 
   return (
-    <div className="container py-5">
-      <h3 className="mb-3">Dashboard Admin — Commandes</h3>
-      {err && <div className="alert alert-danger">{err}</div>}
-      <div className="table-responsive">
-        <table className="table table-striped align-middle">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Client</th>
-              <th>Téléphone</th>
-              <th>Total</th>
-              <th>Statut</th>
-              <th>Créée</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((o, idx) => (
-              <tr key={o._id}>
-                <td>{idx + 1}</td>
-                <td>{o.customerName}</td>
-                <td>{o.customerPhone}</td>
-                <td>{o.total} F</td>
-                <td><span className="badge text-bg-secondary">{o.status}</span></td>
-                <td>{new Date(o.createdAt).toLocaleString()}</td>
-                <td>
-                  <select className="form-select form-select-sm" defaultValue={o.status} onChange={(e)=>updateStatus(o._id, e.target.value)}>
-                    {STATUTS.map(s => <option key={s} value={s}>{s}</option>)}
-                  </select>
-                </td>
-              </tr>
-            ))}
-            {!orders.length && (
-              <tr><td colSpan={7} className="text-center text-muted">Aucune commande</td></tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-      <div className="small text-muted">🔒 Cette page nécessite un token admin (login admin côté backend pour récupérer un JWT admin et le stocker dans localStorage manuellement si besoin).</div>
+    <div className="dashboard-container">
+      {/* Sidebar */}
+      <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+        <h2>Aminastore</h2>
+        <nav>
+          <ul>
+            <li>📦 Produits</li>
+            <li>👥 Clients</li>
+            <li>📊 Statistiques</li>
+            <li>⚙️ Paramètres</li>
+          </ul>
+        </nav>
+      </aside>
+
+      {/* Bouton menu mobile */}
+      <button className="menu-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
+        ☰
+      </button>
+
+      {/* Contenu principal */}
+      <main className="dashboard">
+        {/* Formulaire */}
+        <form onSubmit={handleSubmit}>
+          <h2>Ajouter un produit</h2>
+          <input type="text" name="name" placeholder="Nom du produit" value={formData.name} onChange={handleChange} required />
+          <input type="text" name="description" placeholder="Description" value={formData.description} onChange={handleChange} required />
+          <input type="number" name="price" placeholder="Prix" value={formData.price} onChange={handleChange} required />
+          <input type="text" name="category" placeholder="Catégorie" value={formData.category} onChange={handleChange} required />
+          <input type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleChange} required />
+          <input type="text" name="sizes" placeholder="Tailles (séparées par des virgules)" value={formData.sizes} onChange={handleChange} />
+          <input type="text" name="imageUrl" placeholder="URL de l’image (obligatoire)" value={formData.imageUrl} onChange={handleChange} required />
+          <input type="text" name="videoUrl" placeholder="URL de la vidéo (optionnel)" value={formData.videoUrl} onChange={handleChange} />
+          <button type="submit">Ajouter le produit</button>
+        </form>
+
+        {/* Liste des produits */}
+        <div className="product-list">
+          <h2>Liste des produits</h2>
+          {products.map((product) => (
+            <div className="product-card" key={product._id}>
+              {product.imageUrl && <img src={product.imageUrl} alt={product.name} />}
+              <h4>{product.name}</h4>
+              <p>{product.description}</p>
+              <p><strong>Prix:</strong> {product.price} FCFA | <strong>Stock:</strong> {product.stock}</p>
+              <p><strong>Catégorie:</strong> {product.category}</p>
+              <div className="actions">
+                <button className="edit">Modifier</button>
+                <button className="delete" onClick={() => handleDelete(product._id)}>Supprimer</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </main>
     </div>
   );
-}
+};
+
+export default Dashboard;

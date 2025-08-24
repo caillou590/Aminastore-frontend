@@ -1,15 +1,18 @@
 import React from "react";
-import AdminHeader from "./AdminHeader";
-import AdminSidebar from "./AdminSidebar";
-import AdminFooter from "./AdminFooter";
+import { Outlet } from "react-router-dom";
+import AdminHeader from "./AdminHeader.jsx";
+import AdminSidebar from "./AdminSidebar.jsx";
+import AdminFooter from "./AdminFooter.jsx";
 
-const AdminLayout = ({ children }) => {
+const AdminLayout = () => {
   return (
     <div className="admin-layout d-flex">
       <AdminSidebar />
       <div className="admin-main flex-grow-1 d-flex flex-column">
         <AdminHeader />
-        <div className="admin-content flex-grow-1 p-4">{children}</div>
+        <div className="admin-content flex-grow-1 p-4">
+          <Outlet />
+        </div>
         <AdminFooter />
       </div>
     </div>

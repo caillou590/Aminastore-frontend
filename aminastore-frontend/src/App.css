@@ -1,142 +1,248 @@
-/* app.css */
-
-/* Global */
+/* ======================
+   Global
+====================== */
 body, html, #root {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #fdfdfd;
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
 }
 
-/* Liens */
 a {
   text-decoration: none;
+  color: inherit;
 }
 
-/* Hero */
-.hero {
-  width: 100%;
-  height: 80vh;
+/* ======================
+   Dashboard Container
+====================== */
+.dashboard-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  background-color: #FFD700; /* couleur principale du logo */
+  min-height: 100vh;
 }
 
-.hero-text {
-  position: relative;
+/* ======================
+   Sidebar
+====================== */
+.sidebar {
+  width: 240px;
+  background-color: #2a66f4;
   color: #fff;
-  text-align: center;
-  z-index: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: fixed; /* reste collée à gauche */
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
 }
 
-.hero-text h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-}
-
-.hero-text p {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-}
-
-.hero-text .btn {
-  font-weight: bold;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-}
-
-/* Produits */
-.container h2 {
-  color: #333;
-}
-
-.card {
-  width: 100%;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  background-color: #fff;
-  transition: transform 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-.card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.card-body {
-  padding: 15px;
+.sidebar h2 {
+  margin: 0 0 20px 0;
+  font-size: 1.5rem;
   text-align: center;
 }
 
-.card-title {
-  font-size: 1.2rem;
-  font-weight: bold;
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.card-price {
-  color: #e63946; /* couleur secondaire du logo */
-  font-weight: bold;
-  margin-top: 5px;
+.sidebar li {
+  padding: 12px 0;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-/* Navbar */
-.navbar {
-  background-color: #FFD700; /* couleur principale du logo */
-}
-
-.navbar .nav-link {
-  color: #333;
-  font-weight: 500;
-}
-
-.navbar .nav-link:hover {
-  color: #e63946; /* couleur secondaire du logo */
-}
-
-/* Footer */
-footer {
-  background-color: #333;
+.sidebar li a {
   color: #fff;
-  text-align: center;
-  padding: 20px 0;
-  margin-top: 50px;
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  transition: all 0.3s;
 }
 
-/* Responsivité */
+.sidebar li a:hover,
+.sidebar li a.active {
+  background-color: rgba(255,255,255,0.2);
+  color: #ffd700;
+}
+
+/* ======================
+   Contenu principal
+====================== */
+.dashboard-content {
+  flex: 1;
+  margin-left: 240px; /* espace sidebar */
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+}
+
+/* ======================
+   Bouton menu mobile
+====================== */
+.menu-btn {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: #2a66f4;
+  color: #fff;
+  border: none;
+  font-size: 1.5rem;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  z-index: 1100;
+}
+
+/* ======================
+   Responsive
+====================== */
+@media (max-width: 992px) {
+  .dashboard-content {
+    margin-left: 0;
+  }
+
+  .sidebar {
+    width: 200px;
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .menu-btn {
+    display: block;
+  }
+}
+
 @media (max-width: 768px) {
-  .hero-text h1 {
-    font-size: 2rem;
+  .sidebar {
+    width: 100%;
+    height: 100vh;
   }
 
-  .hero-text p {
-    font-size: 1rem;
+  .dashboard-content {
+    margin-left: 0;
+    flex-direction: column;
+  }
+}
+/* ======================
+   Dashboard Container
+====================== */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ======================
+   Sidebar
+====================== */
+.sidebar {
+  width: 240px;           /* largeur desktop */
+  background-color: #2a66f4;
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  transition: all 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.sidebar h2 {
+  margin: 0 0 20px 0;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  padding: 12px 0;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sidebar li:hover {
+  color: #ffd700;
+}
+
+/* ======================
+   Contenu principal
+====================== */
+.dashboard-content {
+  flex: 1;
+  margin-left: 240px; /* espace sidebar desktop */
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+}
+
+/* ======================
+   Menu mobile
+====================== */
+.menu-btn {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: #2a66f4;
+  color: #fff;
+  border: none;
+  font-size: 1.5rem;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  z-index: 1100;
+}
+
+/* ======================
+   Responsive
+====================== */
+@media (max-width: 992px) {
+  .sidebar {
+    width: 200px;
+    transform: translateX(-100%);
   }
 
-  .card img {
-    height: 180px;
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .menu-btn {
+    display: block;
+  }
+
+  .dashboard-content {
+    margin-left: 0;
   }
 }
 
-@media (max-width: 480px) {
-  .hero-text h1 {
-    font-size: 1.5rem;
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: 100vh;
   }
 
-  .hero-text p {
-    font-size: 0.9rem;
-  }
-
-  .card img {
-    height: 150px;
+  .dashboard-content {
+    margin-left: 0;
+    flex-direction: column;
   }
 }

@@ -1,19 +1,55 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import { FaTachometerAlt, FaBoxOpen, FaShoppingCart } from "react-icons/fa";
+// src/admin/components/AdminSidebar.jsx
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { FaTachometerAlt, FaBoxOpen, FaShoppingCart, FaBars } from "react-icons/fa";
+import "../../admin/admin.css";
 
 const AdminSidebar = () => {
-  const location = useLocation();
-  const isActive = (path) => (location.pathname === `/admin/${path}` ? "active" : "");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => setIsOpen(!isOpen);
 
   return (
-    <aside className="admin-sidebar bg-light border-end vh-100 p-3">
-      <ul className="list-unstyled">
-        <li className={`mb-3 ${isActive("dashboard")}`}><Link to="/admin/dashboard"><FaTachometerAlt /> Dashboard</Link></li>
-        <li className={`mb-3 ${isActive("products")}`}><Link to="/admin/products"><FaBoxOpen /> Produits</Link></li>
-        <li className={`mb-3 ${isActive("orders")}`}><Link to="/admin/orders"><FaShoppingCart /> Commandes</Link></li>
-      </ul>
-    </aside>
+    <>
+      {/* Bouton hamburger mobile */}
+      <button className="menu-btn" onClick={toggleSidebar}>
+        <FaBars />
+      </button>
+
+      {/* Sidebar */}
+      <aside className={`sidebar ${isOpen ? "open" : ""}`}>
+        <h2>Aminastore</h2>
+        <ul>
+          <li>
+            <NavLink
+              to="/admin/dashboard"
+              className={({ isActive }) => isActive ? "active" : ""}
+              onClick={() => setIsOpen(false)}
+            >
+              <FaTachometerAlt /> Dashboard
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/admin/products"
+              className={({ isActive }) => isActive ? "active" : ""}
+              onClick={() => setIsOpen(false)}
+            >
+              <FaBoxOpen /> Produits
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/admin/orders"
+              className={({ isActive }) => isActive ? "active" : ""}
+              onClick={() => setIsOpen(false)}
+            >
+              <FaShoppingCart /> Commandes
+            </NavLink>
+          </li>
+        </ul>
+      </aside>
+    </>
   );
 };
 

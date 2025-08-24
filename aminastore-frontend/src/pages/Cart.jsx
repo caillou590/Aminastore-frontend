@@ -1,59 +1,65 @@
-import React, { useContext } from "react";
-import { CartContext } from "../context/CartContext";
-import { Link } from "react-router-dom";
+// src/components/Cart.jsx
+import React from "react";
+import { useCart } from "../context/CartContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
-  const { cart, total, removeFromCart, clearCart } = useContext(CartContext);
+  const { cartItems, updateQuantity, removeFromCart, totalPrice } = useCart();
+  const navigate = useNavigate();
 
-  if (cart.length === 0)
+  if (cartItems.length === 0)
     return (
-      <div className="container text-center my-4">
-        <h2>Votre panier est vide</h2>
-        <Link to="/boutique" className="btn btn-primary mt-3">
+      <div className="container py-5 text-center">
+        <p>Votre panier est vide.</p>
+        <button className="btn btn-primary" onClick={() => navigate("/boutique")}>
           Retour à la boutique
-        </Link>
+        </button>
       </div>
     );
 
   return (
-    <div className="container my-4">
-      <h2>Votre Panier</h2>
-      <table className="table table-bordered mt-3">
-        <thead>
-          <tr>
-            <th>Produit</th>
-            <th>Prix</th>
-            <th>Quantité</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cart.map((item, idx) => (
-            <tr key={idx}>
-              <td>{item.nom}</td>
-              <td>{item.prix} FCFA</td>
-              <td>{item.quantity || 1}</td>
-              <td>
+    <div className="container py-5">
+      <h3>Panier</h3>
+      <ul className="list-group mb-3">
+        {cartItems.map((item) => (
+          <li
+            key={item._id + "-" + item.taille}
+            className="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <div>
+              <strong>{item.nom}</strong> ({item.taille})
+              <div className="mt-1">
+                Quantité:{" "}
+                <input
+                  type="number"
+                  min="1"
+                  value={item.quantity}
+                  onChange={(e) =>
+                    updateQuantity(item._id, parseInt(e.target.value), item.taille)
+                  }
+                  style={{ width: "60px" }}
+                  className="form-control d-inline-block ms-2"
+                />
                 <button
-                  className="btn btn-danger btn-sm"
-                  onClick={() => removeFromCart(item._id)}
+                  className="btn btn-sm btn-danger ms-2"
+                  onClick={() => removeFromCart(item._id, item.taille)}
                 >
                   Supprimer
                 </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <h4>Total : {total} FCFA</h4>
-      <div className="d-flex gap-2 mt-3">
-        <Link to="/checkout" className="btn btn-success">
-          Passer la commande
-        </Link>
-        <button className="btn btn-secondary" onClick={clearCart}>
-          Vider le panier
-        </button>
-      </div>
+              </div>
+            </div>
+            <span>{Number(item.prix * item.quantity).toLocaleString()} FCFA</span>
+          </li>
+        ))}
+        <li className="list-group-item d-flex justify-content-between fw-bold">
+          Total
+          <span>{Number(totalPrice).toLocaleString()} FCFA</span>
+        </li>
+      </ul>
+
+      <button className="btn btn-success" onClick={() => navigate("/checkout")}>
+        Passer à la commande
+      </button>
     </div>
   );
 };

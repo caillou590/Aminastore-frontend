@@ -1,20 +1,49 @@
+// src/components/ProductCard.jsx
+import React from "react";
 import { Link } from "react-router-dom";
 
-export default function ProductCard({ product, onAdd }) {
-  return (
+const ProductCard = ({ product }) => (
+  <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
     <div className="card h-100 shadow-sm">
-      <img src={product.imageUrl || "https://via.placeholder.com/600x600"} className="card-img-top" alt={product.nom} style={{objectFit:"cover", height:240}} />
-      <div className="card-body d-flex flex-column">
-        <h6 className="card-title">{product.nom}</h6>
-        <p className="text-muted mb-2">{product.categorie}</p>
-        <div className="mt-auto d-flex justify-content-between align-items-center">
-          <strong>{product.prix} F</strong>
-          <div>
-            <Link to={`/product/${product._id}`} className="btn btn-sm btn-outline-secondary me-2">Voir</Link>
-            <button className="btn btn-sm btn-primary" onClick={() => onAdd(product)}>Ajouter</button>
-          </div>
-        </div>
+      {/* Image */}
+      {product.imageUrl ? (
+        <img
+          src={`http://localhost:5000${product.imageUrl}`}
+          alt={product.nom}
+          className="card-img-top"
+          style={{ height: 220, objectFit: "cover" }}
+        />
+      ) : (
+        <img
+          src="https://via.placeholder.com/400x400?text=Produit"
+          alt="Produit par défaut"
+          className="card-img-top"
+          style={{ height: 220, objectFit: "cover" }}
+        />
+      )}
+
+      {/* Vidéo si disponible */}
+      {product.videoUrl && (
+        <video
+          controls
+          className="w-100 mt-2"
+          style={{ height: 220, objectFit: "cover", borderRadius: "4px" }}
+        >
+          <source src={`http://localhost:5000${product.videoUrl}`} type="video/mp4" />
+          Votre navigateur ne supporte pas la vidéo.
+        </video>
+      )}
+
+      <div className="card-body text-center">
+        <h6 className="card-title mb-1">{product.nom}</h6>
+        <small className="text-muted d-block mb-2">{product.categorie || ""}</small>
+        <div className="fw-bold text-danger mb-3">{product.prix?.toLocaleString()} FCFA</div>
+        <Link to={`/produit/${product._id}`} className="btn btn-outline-dark btn-sm">
+          Voir le produit
+        </Link>
       </div>
     </div>
-  );
-}
+  </div>
+);
+
+export default ProductCard;

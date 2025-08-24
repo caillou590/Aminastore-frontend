@@ -1,0 +1,16 @@
+/* src/styles/NavBar.css */
+
+/* Couleur personnalisée du nom de la boutique */
+.brand-name {
+  font-weight: bold;
+  font-size: 1.3rem;
+  color: black; /* 🔥 tu peux changer la couleur ici */
+}
+
+.navbar-nav .nav-link {
+  transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: black; /* la même couleur que le nom boutique */
+}

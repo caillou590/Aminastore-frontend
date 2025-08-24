@@ -1,7 +1,7 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
-export const AdminAuthContext = createContext();
+const AdminAuthContext = createContext(null);
 
 export const AdminAuthProvider = ({ children }) => {
   const [admin, setAdmin] = useState(null);
@@ -10,36 +10,33 @@ export const AdminAuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
     if (token) {
-      setAdmin({ token }); // tu pourrais aussi faire un appel API pour vérifier le token
+      axios
+        .get("http://localhost:5000/api/admin/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => setAdmin(res.data))
+        .catch(() => setAdmin(null))
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
-  const loginAdmin = async (email, password) => {
-    try {
-      const res = await axios.post("http://localhost:5000/api/admin/login", { email, password });
-      const { token, admin: adminData } = res.data;
-
-      // ✅ Sauvegarde du token
-      localStorage.setItem("adminToken", token);
-
-      // ✅ Mise à jour du state
-      setAdmin({ token, ...adminData });
-
-      return true; // succès
-    } catch (err) {
-      throw new Error(err.response?.data?.message || "Erreur lors de la connexion");
-    }
+  const login = (payload, token) => {
+    setAdmin(payload);
+    localStorage.setItem("adminToken", token);
   };
 
-  const logoutAdmin = () => {
-    localStorage.removeItem("adminToken");
+  const logout = () => {
     setAdmin(null);
+    localStorage.removeItem("adminToken");
   };
 
   return (
-    <AdminAuthContext.Provider value={{ admin, loginAdmin, logoutAdmin, loading }}>
+    <AdminAuthContext.Provider value={{ admin, login, logout, loading }}>
       {children}
     </AdminAuthContext.Provider>
   );
 };
+
+export const useAdminAuth = () => useContext(AdminAuthContext);
