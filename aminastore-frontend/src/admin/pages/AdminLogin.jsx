@@ -9,31 +9,27 @@ const AdminLogin = () => {
   const [motdepasse, setMotdepasse] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAdminAuth(); // récupère la fonction login du contexte
+  const { login } = useAdminAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/admin/login", {
-        email,
-        motdepasse,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/admin/login`,
+        { email, motdepasse }
+      );
 
-      // Mettre à jour le contexte avec l'admin connecté
-      login(res.data);
+      login(res.data, res.data.token);
+      localStorage.setItem("adminToken", res.data.token);
 
-      // Stocker le token dans localStorage (optionnel si tu veux persister)
-      localStorage.setItem("admin_user", JSON.stringify(res.data));
-
-      // Redirection vers le dashboard
       navigate("/admin/dashboard");
     } catch (err) {
       console.error(err);
       alert(
         err.response?.data?.message ||
-          "Erreur lors de la connexion. Vérifiez vos identifiants."
+        "Erreur lors de la connexion. Vérifiez vos identifiants."
       );
     } finally {
       setLoading(false);
