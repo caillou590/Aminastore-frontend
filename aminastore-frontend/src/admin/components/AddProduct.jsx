@@ -1,5 +1,7 @@
+// src/admin/components/AddProduct.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { getImageUrl } from "../../utils/image.js"; // utilitaire pour générer URL HTTPS
 
 const AddProduct = ({ onProductAdded, editingProduct, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -25,8 +27,9 @@ const AddProduct = ({ onProductAdded, editingProduct, onCancel }) => {
           ? editingProduct.tailles.join(",")
           : editingProduct.tailles
       });
-      setPreviewImage(editingProduct.imageUrl ? `http://localhost:5000${editingProduct.imageUrl}` : null);
-      setPreviewVideo(editingProduct.videoUrl ? `http://localhost:5000${editingProduct.videoUrl}` : null);
+      // URLs HTTPS pour images/vidéos existantes
+      setPreviewImage(editingProduct.imageUrl ? getImageUrl(editingProduct.imageUrl) : null);
+      setPreviewVideo(editingProduct.videoUrl ? getImageUrl(editingProduct.videoUrl) : null);
     }
   }, [editingProduct]);
 
@@ -36,7 +39,7 @@ const AddProduct = ({ onProductAdded, editingProduct, onCancel }) => {
     const file = e.target.files[0];
     if (file) {
       setImageFile(file);
-      setPreviewImage(URL.createObjectURL(file));
+      setPreviewImage(URL.createObjectURL(file)); // preview local
     }
   };
 
@@ -44,7 +47,7 @@ const AddProduct = ({ onProductAdded, editingProduct, onCancel }) => {
     const file = e.target.files[0];
     if (file) {
       setVideoFile(file);
-      setPreviewVideo(URL.createObjectURL(file));
+      setPreviewVideo(URL.createObjectURL(file)); // preview local
     }
   };
 
@@ -75,21 +78,23 @@ const AddProduct = ({ onProductAdded, editingProduct, onCancel }) => {
       };
 
       const url = editingProduct
-        ? `http://localhost:5000/api/products/${editingProduct._id}`
-        : "http://localhost:5000/api/products";
+        ? `${import.meta.env.VITE_API_URL}/api/products/${editingProduct._id}`
+        : `${import.meta.env.VITE_API_URL}/api/products`;
 
       const method = editingProduct ? axios.put : axios.post;
       const res = await method(url, data, config);
 
       onProductAdded(res.data);
+
+      // Reset formulaire et previews
       setFormData({ nom: "", description: "", prix: "", categorie: "", stock: "", tailles: "" });
       setImageFile(null);
       setVideoFile(null);
       setPreviewImage(null);
       setPreviewVideo(null);
     } catch (err) {
-      console.error(err);
-      alert("Erreur lors de l'enregistrement !");
+      console.error(err.response?.data || err);
+      alert(err.response?.data?.message || "Erreur lors de l'enregistrement !");
     } finally {
       setLoading(false);
     }

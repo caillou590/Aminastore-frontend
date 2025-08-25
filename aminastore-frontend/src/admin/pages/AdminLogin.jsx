@@ -1,4 +1,3 @@
-// src/admin/pages/AdminLogin.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -23,9 +22,6 @@ const AdminLogin = () => {
 
       // Mettre à jour le contexte avec l'admin connecté
       login(res.data, res.data.token);
-
-      // Stocker le token pour persister la session
-      localStorage.setItem("adminToken", res.data.token);
 
       // Redirection vers le dashboard
       navigate("/admin/dashboard");
