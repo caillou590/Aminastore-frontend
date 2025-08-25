@@ -3,6 +3,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
+// Base URL dynamique depuis le .env
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const AuthForm = ({ type }) => {
   const isRegister = type === "register";
   const [nom, setNom] = useState("");
@@ -16,31 +19,33 @@ const AuthForm = ({ type }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = isRegister
-      ? "http://localhost:5000/api/clients/register"
-      : "http://localhost:5000/api/clients/login";
+      ? `${API_BASE}/api/clients/register`
+      : `${API_BASE}/api/clients/login`;
 
     try {
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(isRegister ? { nom, email, motdepasse } : { email, motdepasse }),
+        body: JSON.stringify(
+          isRegister ? { nom, email, motdepasse } : { email, motdepasse }
+        ),
       });
+
       const data = await res.json();
 
-      if (res.ok) {
-        if (isRegister) {
-          setMessage("✅ Inscription réussie ! Redirection vers connexion...");
-          setTimeout(() => navigate("/login"), 1200);
-        } else {
-          login(data);
-          setMessage("✅ Connexion réussie ! Redirection vers panier...");
-          setTimeout(() => navigate("/panier"), 800);
-        }
+      if (!res.ok) throw new Error(data.message || "Erreur serveur");
+
+      if (isRegister) {
+        setMessage("✅ Inscription réussie ! Redirection vers connexion...");
+        setTimeout(() => navigate("/login"), 1200);
       } else {
-        setMessage(data.message || "❌ Erreur");
+        // Sauvegarde token + user dans le contexte
+        login(data);
+        setMessage("✅ Connexion réussie ! Redirection vers panier...");
+        setTimeout(() => navigate("/panier"), 800);
       }
     } catch (err) {
-      setMessage("❌ Erreur serveur : " + err.message);
+      setMessage("❌ " + err.message);
     }
   };
 
@@ -52,13 +57,25 @@ const AuthForm = ({ type }) => {
           {isRegister && (
             <div className="mb-3">
               <label className="form-label">Nom</label>
-              <input type="text" className="form-control" value={nom} onChange={(e) => setNom(e.target.value)} required />
+              <input
+                type="text"
+                className="form-control"
+                value={nom}
+                onChange={(e) => setNom(e.target.value)}
+                required
+              />
             </div>
           )}
 
           <div className="mb-3">
             <label className="form-label">Email</label>
-            <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input
+              type="email"
+              className="form-control"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
 
           <div className="mb-3">
@@ -71,7 +88,12 @@ const AuthForm = ({ type }) => {
                 onChange={(e) => setMotdepasse(e.target.value)}
                 required
               />
-              <button type="button" className="btn btn-outline-secondary" onClick={() => setShowPassword((s) => !s)}>
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                onClick={() => setShowPassword((s) => !s)}
+                aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+              >
                 {showPassword ? "Masquer" : "Voir"}
               </button>
             </div>

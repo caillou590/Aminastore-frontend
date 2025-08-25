@@ -10,11 +10,14 @@ const ProductDashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
 
-  // Fonction pour récupérer les produits
+  // Récupérer la base URL depuis .env
+  const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+  // --- Fetch produits ---
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await axios.get(`${API_BASE}/api/products`);
       setProducts(res.data.products || res.data);
     } catch (err) {
       console.error(err);
@@ -28,16 +31,17 @@ const ProductDashboard = () => {
     fetchProducts();
   }, []);
 
-  // Ajouter produit et mise à jour instantanée
+  // --- Ajouter un produit à la liste ---
   const handleProductAdded = (newProduct) => {
     setProducts([newProduct, ...products]);
   };
 
+  // --- Supprimer un produit ---
   const handleDelete = async (id) => {
     if (!window.confirm("Voulez-vous vraiment supprimer ce produit ?")) return;
     try {
       const token = localStorage.getItem("adminToken");
-      await axios.delete(`http://localhost:5000/api/products/${id}`, {
+      await axios.delete(`${API_BASE}/api/products/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProducts(products.filter((p) => p._id !== id));
@@ -47,6 +51,7 @@ const ProductDashboard = () => {
     }
   };
 
+  // --- Modal modification ---
   const handleEditClick = (product) => {
     setEditProduct(product);
     setShowModal(true);
@@ -61,7 +66,7 @@ const ProductDashboard = () => {
     try {
       const token = localStorage.getItem("adminToken");
       const res = await axios.put(
-        `http://localhost:5000/api/products/${editProduct._id}`,
+        `${API_BASE}/api/products/${editProduct._id}`,
         editProduct,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -92,33 +97,62 @@ const ProductDashboard = () => {
           ) : (
             <div className="d-flex flex-column gap-3">
               {products.map((product) => (
-                <div key={product._id} className="card p-3 d-flex flex-row align-items-center gap-3">
+                <div
+                  key={product._id}
+                  className="card p-3 d-flex flex-row align-items-center gap-3"
+                >
                   <div>
-                    <img
-                      src={product.imageUrl}
-                      alt={product.nom}
-                      style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "5px" }}
-                    />
+                    {/* Image */}
+                    {product.imageUrl && (
+                      <img
+                        src={product.imageUrl}
+                        alt={product.nom}
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                          borderRadius: "5px",
+                        }}
+                      />
+                    )}
+
+                    {/* Vidéo */}
                     {product.videoUrl && (
                       <video
                         src={product.videoUrl}
                         controls
-                        style={{ width: "100px", height: "80px", display: "block", marginTop: "5px" }}
+                        style={{
+                          width: "100px",
+                          height: "80px",
+                          display: "block",
+                          marginTop: "5px",
+                        }}
                       />
                     )}
                   </div>
+
                   <div className="flex-grow-1">
                     <h5>{product.nom}</h5>
                     <p>{product.description}</p>
-                    <p>Prix: {product.prix} € | Stock: {product.stock}</p>
+                    <p>
+                      Prix: {product.prix?.toLocaleString()} FCFA | Stock:{" "}
+                      {product.stock}
+                    </p>
                     <p>Catégorie: {product.categorie}</p>
                     {product.tailles && <p>Tailles: {product.tailles}</p>}
                   </div>
+
                   <div className="d-flex flex-column gap-2">
-                    <button className="btn btn-primary btn-sm" onClick={() => handleEditClick(product)}>
+                    <button
+                      className="btn btn-primary btn-sm"
+                      onClick={() => handleEditClick(product)}
+                    >
                       Modifier
                     </button>
-                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(product._id)}>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleDelete(product._id)}
+                    >
                       Supprimer
                     </button>
                   </div>
@@ -136,21 +170,61 @@ const ProductDashboard = () => {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Modifier le produit</h5>
-                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowModal(false)}
+                ></button>
               </div>
               <form onSubmit={handleEditSubmit}>
                 <div className="modal-body d-flex flex-column gap-2">
-                  <input type="text" name="nom" value={editProduct.nom} onChange={handleEditChange} required />
-                  <textarea name="description" value={editProduct.description} onChange={handleEditChange} required />
-                  <input type="number" name="prix" value={editProduct.prix} onChange={handleEditChange} required />
-                  <input type="text" name="categorie" value={editProduct.categorie} onChange={handleEditChange} required />
-                  <input type="number" name="stock" value={editProduct.stock} onChange={handleEditChange} required />
-                  <input type="text" name="tailles" value={editProduct.tailles} onChange={handleEditChange} />
-                  <input type="text" name="imageUrl" value={editProduct.imageUrl} onChange={handleEditChange} required />
-                  <input type="text" name="videoUrl" value={editProduct.videoUrl} onChange={handleEditChange} />
+                  <input
+                    type="text"
+                    name="nom"
+                    value={editProduct.nom}
+                    onChange={handleEditChange}
+                    required
+                  />
+                  <textarea
+                    name="description"
+                    value={editProduct.description}
+                    onChange={handleEditChange}
+                    required
+                  />
+                  <input
+                    type="number"
+                    name="prix"
+                    value={editProduct.prix}
+                    onChange={handleEditChange}
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="categorie"
+                    value={editProduct.categorie}
+                    onChange={handleEditChange}
+                    required
+                  />
+                  <input
+                    type="number"
+                    name="stock"
+                    value={editProduct.stock}
+                    onChange={handleEditChange}
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="tailles"
+                    value={editProduct.tailles || ""}
+                    onChange={handleEditChange}
+                  />
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => setShowModal(false)}
+                  >
                     Annuler
                   </button>
                   <button type="submit" className="btn btn-primary">

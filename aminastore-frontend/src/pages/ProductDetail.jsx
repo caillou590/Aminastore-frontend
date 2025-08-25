@@ -13,10 +13,12 @@ const ProductDetail = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const res = await axios.get(`${API_URL}/api/products/${id}`);
         setProduct(res.data);
         if (res.data.tailles?.length) setSelectedSize(res.data.tailles[0]);
       } catch (err) {
@@ -26,7 +28,7 @@ const ProductDetail = () => {
       }
     };
     fetchProduct();
-  }, [id]);
+  }, [id, API_URL]);
 
   if (loading) return <p className="text-center py-5">Chargement du produit...</p>;
   if (!product) return <p className="text-center py-5">Produit introuvable</p>;
@@ -56,7 +58,7 @@ const ProductDetail = () => {
           <div className="card shadow-sm p-3">
             {product.imageUrl && (
               <img
-                src={`http://localhost:5000${product.imageUrl}`}
+                src={`${API_URL}${product.imageUrl}`}
                 alt={product.nom}
                 className="img-fluid rounded"
                 style={{ maxHeight: "400px", objectFit: "contain", width: "100%" }}
@@ -68,7 +70,7 @@ const ProductDetail = () => {
                 controls
                 style={{ maxHeight: "400px" }}
               >
-                <source src={`http://localhost:5000${product.videoUrl}`} type="video/mp4" />
+                <source src={`${API_URL}${product.videoUrl}`} type="video/mp4" />
                 Votre navigateur ne supporte pas la vidéo.
               </video>
             )}

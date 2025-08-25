@@ -1,14 +1,14 @@
-// src/components/ProductCard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const ProductCard = ({ product }) => (
   <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
     <div className="card h-100 shadow-sm">
-      {/* Image */}
       {product.imageUrl ? (
         <img
-          src={product.imageUrl}
+          src={product.imageUrl.startsWith("http") ? product.imageUrl : `${API_URL}${product.imageUrl}`}
           alt={product.nom}
           className="card-img-top"
           style={{ height: 220, objectFit: "cover" }}
@@ -22,14 +22,13 @@ const ProductCard = ({ product }) => (
         />
       )}
 
-      {/* Vidéo si disponible */}
       {product.videoUrl && (
         <video
           controls
           className="w-100 mt-2"
           style={{ height: 220, objectFit: "cover", borderRadius: "4px" }}
         >
-          <source src={product.videoUrl} type="video/mp4" />
+          <source src={product.videoUrl.startsWith("http") ? product.videoUrl : `${API_URL}${product.videoUrl}`} type="video/mp4" />
           Votre navigateur ne supporte pas la vidéo.
         </video>
       )}
