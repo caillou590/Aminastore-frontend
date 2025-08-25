@@ -39,7 +39,7 @@ const AddProduct = ({ onProductAdded, editingProduct, onCancel }) => {
     const file = e.target.files[0];
     if (file) {
       setImageFile(file);
-      setPreviewImage(URL.createObjectURL(file)); // preview local
+      setPreviewImage(URL.createObjectURL(file));
     }
   };
 
@@ -47,7 +47,7 @@ const AddProduct = ({ onProductAdded, editingProduct, onCancel }) => {
     const file = e.target.files[0];
     if (file) {
       setVideoFile(file);
-      setPreviewVideo(URL.createObjectURL(file)); // preview local
+      setPreviewVideo(URL.createObjectURL(file));
     }
   };
 
@@ -86,7 +86,6 @@ const AddProduct = ({ onProductAdded, editingProduct, onCancel }) => {
 
       onProductAdded(res.data);
 
-      // Reset formulaire et previews
       setFormData({ nom: "", description: "", prix: "", categorie: "", stock: "", tailles: "" });
       setImageFile(null);
       setVideoFile(null);

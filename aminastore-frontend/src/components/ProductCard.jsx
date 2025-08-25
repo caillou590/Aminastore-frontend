@@ -1,6 +1,7 @@
 // src/components/ProductCard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
+import { getImageUrl } from "../utils/image.js";
 
 const ProductCard = ({ product }) => (
   <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
@@ -8,7 +9,7 @@ const ProductCard = ({ product }) => (
       {/* Image */}
       {product.imageUrl ? (
         <img
-          src={`http://localhost:5000${product.imageUrl}`}
+          src={getImageUrl(product.imageUrl)}
           alt={product.nom}
           className="card-img-top"
           style={{ height: 220, objectFit: "cover" }}
@@ -29,7 +30,7 @@ const ProductCard = ({ product }) => (
           className="w-100 mt-2"
           style={{ height: 220, objectFit: "cover", borderRadius: "4px" }}
         >
-          <source src={`http://localhost:5000${product.videoUrl}`} type="video/mp4" />
+          <source src={getImageUrl(product.videoUrl)} type="video/mp4" />
           Votre navigateur ne supporte pas la vidéo.
         </video>
       )}

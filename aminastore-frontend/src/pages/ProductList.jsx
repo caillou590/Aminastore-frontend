@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCard.jsx";
 import { PRODUCTS } from "../config/api.js";
+import { getImageUrl } from "../utils/image.js"; // ⚡ important
 
 const ProductList = () => {
   const [items, setItems] = useState([]);
@@ -12,7 +13,13 @@ const ProductList = () => {
     (async () => {
       try {
         const res = await axios.get(PRODUCTS);
-        setItems(res.data?.products || res.data || []);
+        // ⚡ On map directement pour générer les URLs HTTPS
+        const products = (res.data?.products || res.data || []).map(p => ({
+          ...p,
+          imageUrl: p.imageUrl ? getImageUrl(p.imageUrl) : null,
+          videoUrl: p.videoUrl ? getImageUrl(p.videoUrl) : null
+        }));
+        setItems(products);
       } catch (e) {
         console.error(e);
       }
