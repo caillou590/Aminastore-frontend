@@ -26,7 +26,6 @@ const AddProduct = ({ onProductAdded, editingProduct, onCancel }) => {
           ? editingProduct.tailles.join(",")
           : editingProduct.tailles
       });
-
       setPreviewImage(editingProduct.imageUrl ? getImageUrl(editingProduct.imageUrl) : null);
       setPreviewVideo(editingProduct.videoUrl ? getImageUrl(editingProduct.videoUrl) : null);
     }
@@ -111,12 +110,18 @@ const AddProduct = ({ onProductAdded, editingProduct, onCancel }) => {
 
         <label>Image :</label>
         <input type="file" accept="image/*" onChange={handleImageChange} />
-        {previewImage && <img src={previewImage} alt="Aperçu" style={{ width: 150, marginTop: 5, borderRadius: 8 }} />}
+        {previewImage && (
+          <img
+            src={previewImage}
+            alt="Aperçu"
+            style={{ width: "150px", marginTop: "5px", borderRadius: "8px" }}
+          />
+        )}
 
         <label>Vidéo :</label>
         <input type="file" accept="video/*" onChange={handleVideoChange} />
         {previewVideo && (
-          <video style={{ width: 250, marginTop: 5 }} controls>
+          <video style={{ width: "250px", marginTop: "5px" }} controls>
             <source src={previewVideo} type="video/mp4" />
             Votre navigateur ne supporte pas la vidéo.
           </video>

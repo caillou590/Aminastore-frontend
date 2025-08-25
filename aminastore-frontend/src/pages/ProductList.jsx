@@ -2,30 +2,28 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCard.jsx";
-import { PRODUCTS } from "../config/api.js";
-import { getImageUrl } from "../utils/image.js"; // ⚡ important
+
+// URL de ton backend Render
+const BASE_API = "https://aminastore-ecommerce.onrender.com/api/products";
 
 const ProductList = () => {
   const [items, setItems] = useState([]);
   const [q, setQ] = useState("");
 
   useEffect(() => {
-    (async () => {
+    const fetchProducts = async () => {
       try {
-        const res = await axios.get(PRODUCTS);
-        // ⚡ On map directement pour générer les URLs HTTPS
-        const products = (res.data?.products || res.data || []).map(p => ({
-          ...p,
-          imageUrl: p.imageUrl ? getImageUrl(p.imageUrl) : null,
-          videoUrl: p.videoUrl ? getImageUrl(p.videoUrl) : null
-        }));
-        setItems(products);
-      } catch (e) {
-        console.error(e);
+        const res = await axios.get(BASE_API);
+        // Les URLs absolues sont déjà générées côté backend
+        setItems(res.data);
+      } catch (err) {
+        console.error("Erreur lors du chargement des produits :", err);
       }
-    })();
+    };
+    fetchProducts();
   }, []);
 
+  // Filtrer les produits selon la recherche
   const filtered = items.filter(p =>
     (p.nom || "").toLowerCase().includes(q.toLowerCase())
   );
@@ -42,9 +40,11 @@ const ProductList = () => {
           onChange={(e) => setQ(e.target.value)}
         />
       </div>
+
       <div className="row">
-        {filtered.map(p => <ProductCard key={p._id} product={p} />)}
-        {!filtered.length && (
+        {filtered.length > 0 ? (
+          filtered.map(p => <ProductCard key={p._id} product={p} />)
+        ) : (
           <div className="text-muted text-center py-5">Aucun produit.</div>
         )}
       </div>

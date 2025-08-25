@@ -1,6 +1,6 @@
+// src/components/ProductCard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { getImageUrl } from "../utils/image.js";
 
 const ProductCard = ({ product }) => (
   <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
@@ -8,7 +8,7 @@ const ProductCard = ({ product }) => (
       {/* Image */}
       {product.imageUrl ? (
         <img
-          src={getImageUrl(product.imageUrl)}
+          src={product.imageUrl}
           alt={product.nom}
           className="card-img-top"
           style={{ height: 220, objectFit: "cover" }}
@@ -29,7 +29,7 @@ const ProductCard = ({ product }) => (
           className="w-100 mt-2"
           style={{ height: 220, objectFit: "cover", borderRadius: "4px" }}
         >
-          <source src={getImageUrl(product.videoUrl)} type="video/mp4" />
+          <source src={product.videoUrl} type="video/mp4" />
           Votre navigateur ne supporte pas la vidéo.
         </video>
       )}
@@ -37,9 +37,7 @@ const ProductCard = ({ product }) => (
       <div className="card-body text-center">
         <h6 className="card-title mb-1">{product.nom}</h6>
         <small className="text-muted d-block mb-2">{product.categorie || ""}</small>
-        <div className="fw-bold text-danger mb-3">
-          {product.prix?.toLocaleString()} FCFA
-        </div>
+        <div className="fw-bold text-danger mb-3">{product.prix?.toLocaleString()} FCFA</div>
         <Link to={`/produit/${product._id}`} className="btn btn-outline-dark btn-sm">
           Voir le produit
         </Link>
