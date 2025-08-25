@@ -1,3 +1,4 @@
+// src/admin/context/AdminAuthContext.jsx
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
@@ -10,8 +11,9 @@ export const AdminAuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
     if (token) {
+      // ✅ Utilisation de la variable d'environnement pour le backend en ligne
       axios
-        .get("http://localhost:5000/api/admin/me", {
+        .get(`${import.meta.env.VITE_API_URL}/api/admin/me`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => setAdmin(res.data))
