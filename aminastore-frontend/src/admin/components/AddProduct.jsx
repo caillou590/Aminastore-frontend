@@ -1,7 +1,6 @@
-// src/admin/components/AddProduct.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { getImageUrl } from "../../utils/image.js"; // utilitaire pour générer URL HTTPS
+import { getImageUrl } from "../../utils/image.js";
 
 const AddProduct = ({ onProductAdded, editingProduct, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -27,7 +26,7 @@ const AddProduct = ({ onProductAdded, editingProduct, onCancel }) => {
           ? editingProduct.tailles.join(",")
           : editingProduct.tailles
       });
-      // URLs HTTPS pour images/vidéos existantes
+
       setPreviewImage(editingProduct.imageUrl ? getImageUrl(editingProduct.imageUrl) : null);
       setPreviewVideo(editingProduct.videoUrl ? getImageUrl(editingProduct.videoUrl) : null);
     }
@@ -112,18 +111,12 @@ const AddProduct = ({ onProductAdded, editingProduct, onCancel }) => {
 
         <label>Image :</label>
         <input type="file" accept="image/*" onChange={handleImageChange} />
-        {previewImage && (
-          <img
-            src={previewImage}
-            alt="Aperçu"
-            style={{ width: "150px", marginTop: "5px", borderRadius: "8px" }}
-          />
-        )}
+        {previewImage && <img src={previewImage} alt="Aperçu" style={{ width: 150, marginTop: 5, borderRadius: 8 }} />}
 
         <label>Vidéo :</label>
         <input type="file" accept="video/*" onChange={handleVideoChange} />
         {previewVideo && (
-          <video style={{ width: "250px", marginTop: "5px" }} controls>
+          <video style={{ width: 250, marginTop: 5 }} controls>
             <source src={previewVideo} type="video/mp4" />
             Votre navigateur ne supporte pas la vidéo.
           </video>

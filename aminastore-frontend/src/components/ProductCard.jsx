@@ -1,4 +1,3 @@
-// src/components/ProductCard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 import { getImageUrl } from "../utils/image.js";
@@ -38,7 +37,9 @@ const ProductCard = ({ product }) => (
       <div className="card-body text-center">
         <h6 className="card-title mb-1">{product.nom}</h6>
         <small className="text-muted d-block mb-2">{product.categorie || ""}</small>
-        <div className="fw-bold text-danger mb-3">{product.prix?.toLocaleString()} FCFA</div>
+        <div className="fw-bold text-danger mb-3">
+          {product.prix?.toLocaleString()} FCFA
+        </div>
         <Link to={`/produit/${product._id}`} className="btn btn-outline-dark btn-sm">
           Voir le produit
         </Link>

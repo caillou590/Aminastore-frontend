@@ -1,7 +1,9 @@
 // src/utils/image.js
+const BASE_URL = import.meta.env.VITE_API_URL || "https://aminastore-backend.onrender.com";
+
 export const getImageUrl = (path) => {
   if (!path) return null;
-  // Remplace par l'URL de ton backend déployé sur Render
-  const BASE_URL = "https://aminastore-backend.onrender.com"; 
-  return `${BASE_URL}${path}`;
+  if (path.startsWith("http")) return path; // URL complète déjà fournie
+  // Assure-toi de ne pas dupliquer les slashs
+  return `${BASE_URL}${path.startsWith("/") ? "" : "/"}${path}`;
 };
