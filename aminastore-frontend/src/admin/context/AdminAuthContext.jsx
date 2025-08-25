@@ -11,7 +11,6 @@ export const AdminAuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
     if (token) {
-      // ✅ Utilisation de la variable d'environnement pour le backend en ligne
       axios
         .get(`${import.meta.env.VITE_API_URL}/api/admin/me`, {
           headers: { Authorization: `Bearer ${token}` },
