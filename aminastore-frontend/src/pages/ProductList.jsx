@@ -1,52 +1,45 @@
-// src/pages/ProductList.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCard.jsx";
 
-// URL de ton backend Render
-const BASE_API = "https://aminastore-ecommerce.onrender.com/api/products";
-
 const ProductList = () => {
-  const [items, setItems] = useState([]);
-  const [q, setQ] = useState("");
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get(BASE_API);
-        // Les URLs absolues sont déjà générées côté backend
-        setItems(res.data);
+        const res = await axios.get(`${API_URL}/api/products`);
+        setProducts(res.data?.products || res.data || []);
       } catch (err) {
-        console.error("Erreur lors du chargement des produits :", err);
+        console.error("Erreur chargement produits :", err);
+        setProducts([]);
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchProducts();
   }, []);
 
-  // Filtrer les produits selon la recherche
-  const filtered = items.filter(p =>
-    (p.nom || "").toLowerCase().includes(q.toLowerCase())
-  );
+  if (loading) return <p>Chargement des produits...</p>;
+  if (!products.length) return <p>Aucun produit disponible</p>;
 
   return (
-    <div className="container py-4">
-      <div className="d-flex justify-content-between align-items-center mb-3 flex-column flex-md-row">
-        <h3 className="m-0">Boutique</h3>
-        <input
-          className="form-control mt-2 mt-md-0"
-          style={{ maxWidth: 280 }}
-          placeholder="Recherche…"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-        />
-      </div>
-
+    <div className="container my-5">
+      <h2 className="text-center mb-4">Tous nos produits</h2>
       <div className="row">
-        {filtered.length > 0 ? (
-          filtered.map(p => <ProductCard key={p._id} product={p} />)
-        ) : (
-          <div className="text-muted text-center py-5">Aucun produit.</div>
-        )}
+        {products.map((product) => (
+          <ProductCard
+            key={product._id}
+            product={{
+              ...product,
+              imageUrl: product.imageUrl?.startsWith("http") ? product.imageUrl : `${API_URL}${product.imageUrl}`,
+              videoUrl: product.videoUrl ? (product.videoUrl.startsWith("http") ? product.videoUrl : `${API_URL}${product.videoUrl}`) : null,
+            }}
+          />
+        ))}
       </div>
     </div>
   );

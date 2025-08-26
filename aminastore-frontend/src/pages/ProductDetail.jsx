@@ -54,29 +54,31 @@ const ProductDetail = () => {
   return (
     <div className="container my-5">
       <div className="row g-4">
+        {/* Image / Vidéo */}
         <div className="col-md-6">
           <div className="card shadow-sm p-3">
-            {product.imageUrl && (
+            {product.image && (
               <img
-                src={`${API_URL}${product.imageUrl}`}
+                src={`${API_URL}${product.image}`}
                 alt={product.nom}
                 className="img-fluid rounded"
                 style={{ maxHeight: "400px", objectFit: "contain", width: "100%" }}
               />
             )}
-            {product.videoUrl && (
+            {product.video && (
               <video
                 className="w-100 mt-3 rounded"
                 controls
                 style={{ maxHeight: "400px" }}
               >
-                <source src={`${API_URL}${product.videoUrl}`} type="video/mp4" />
+                <source src={`${API_URL}${product.video}`} type="video/mp4" />
                 Votre navigateur ne supporte pas la vidéo.
               </video>
             )}
           </div>
         </div>
 
+        {/* Détails produit */}
         <div className="col-md-6">
           <div className="card shadow-sm p-4">
             <h2>{product.nom}</h2>

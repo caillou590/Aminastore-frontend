@@ -6,14 +6,13 @@ import ProductCard from "../components/ProductCard.jsx";
 const Home = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get(`${API_URL}/api/products?limit=4`); // seulement 4 produits phares
-        setItems(res.data?.products || res.data || []);
+        const res = await axios.get(`${API_URL}/api/products?limit=4`);
+        setItems(res.data?.products?.slice(0, 4) || res.data?.slice(0, 4) || []);
       } catch (e) {
         console.error(e);
       } finally {
@@ -31,8 +30,20 @@ const Home = () => {
           <div className="text-center py-5">Chargement…</div>
         ) : (
           <div className="row">
-            {items.map((p) => <ProductCard key={p._id} product={{ ...p, imageUrl: `${API_URL}${p.imageUrl}`, videoUrl: p.videoUrl ? `${API_URL}${p.videoUrl}` : null }} />)}
-            {!items.length && <div className="text-center text-muted py-5">Aucun produit pour le moment.</div>}
+            {items.length > 0 ? (
+              items.map((p) => (
+                <ProductCard
+                  key={p._id}
+                  product={{
+                    ...p,
+                    imageUrl: p.imageUrl?.startsWith("http") ? p.imageUrl : `${API_URL}${p.imageUrl}`,
+                    videoUrl: p.videoUrl ? (p.videoUrl.startsWith("http") ? p.videoUrl : `${API_URL}${p.videoUrl}`) : null,
+                  }}
+                />
+              ))
+            ) : (
+              <div className="text-center text-muted py-5">Aucun produit pour le moment.</div>
+            )}
           </div>
         )}
       </div>

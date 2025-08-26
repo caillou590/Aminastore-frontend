@@ -1,7 +1,7 @@
 // src/admin/pages/AdminProducts.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { PRODUCTS, API_BASE } from "../../config/api";
+import { API_URL, PRODUCTS } from "../../config/api";
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -23,9 +23,16 @@ const AdminProducts = () => {
     try {
       setLoading(true);
       const res = await axios.get(PRODUCTS);
-      if (Array.isArray(res.data)) setProducts(res.data);
-      else if (res.data?.products) setProducts(res.data.products);
-      else setProducts([]);
+      let data = res.data?.products || res.data || [];
+
+      // Transforme imageUrl et videoUrl en URLs complètes
+      data = data.map(p => ({
+        ...p,
+        imageUrl: p.imageUrl ? `${API_URL}${p.imageUrl}` : null,
+        videoUrl: p.videoUrl ? `${API_URL}${p.videoUrl}` : null,
+      }));
+
+      setProducts(data);
     } catch (err) {
       console.error("Erreur chargement produits :", err);
       setProducts([]);
@@ -97,7 +104,7 @@ const AdminProducts = () => {
       video: null,
       editId: p._id,
     });
-    window.scrollTo({ top: 0, behavior: "smooth" }); // remonter vers le formulaire
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // ------------------- Delete handlers -------------------
@@ -175,7 +182,7 @@ const AdminProducts = () => {
           {products.map(p => (
             <li key={p._id} className="border rounded p-3 flex flex-col md:flex-row md:justify-between md:items-center gap-3">
               <div className="flex flex-col md:flex-row md:gap-4 items-center">
-                {p.imageUrl && <img src={`${API_BASE}${p.imageUrl}`} alt={p.nom} style={{ width: 80, height: 80, objectFit: "cover" }} className="rounded" />}
+                {p.imageUrl && <img src={p.imageUrl} alt={p.nom} style={{ width: 80, height: 80, objectFit: "cover" }} className="rounded" />}
                 <div>
                   <p className="font-semibold">{p.nom}</p>
                   <p className="text-red-600">{p.prix.toLocaleString()} FCFA</p>
@@ -183,7 +190,7 @@ const AdminProducts = () => {
                 </div>
               </div>
 
-              {p.videoUrl && <video src={`${API_BASE}${p.videoUrl}`} controls style={{ width: 150, height: 80, objectFit: "cover" }} className="rounded" />}
+              {p.videoUrl && <video src={p.videoUrl} controls style={{ width: 150, height: 80, objectFit: "cover" }} className="rounded" />}
 
               <div className="flex gap-2 flex-wrap">
                 <button className="btn btn-primary btn-sm" onClick={() => loadProductForEdit(p)}>Modifier</button>
