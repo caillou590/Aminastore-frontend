@@ -1,11 +1,10 @@
-// src/admin/pages/AdminDashboard.jsx
+// src/pages/AdminDashboard.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AddProduct from "../components/AddProduct";
 import AdminSidebar from "../components/AdminSidebar";
 import "../../admin/admin.css";
 
-// URL backend depuis variable d'environnement
 const API_BASE = import.meta.env.VITE_API_URL || "https://aminastore-ecommerce.onrender.com";
 
 const AdminDashboard = () => {
@@ -13,7 +12,6 @@ const AdminDashboard = () => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [loadingProducts, setLoadingProducts] = useState(false);
 
-  // Charger les produits depuis le backend
   const loadProducts = async () => {
     try {
       setLoadingProducts(true);
@@ -31,7 +29,6 @@ const AdminDashboard = () => {
     loadProducts();
   }, []);
 
-  // Ajouter ou mettre à jour un produit
   const handleProductAdded = (product) => {
     if (editingProduct) {
       setProducts(products.map(p => p._id === product._id ? product : p));
@@ -41,10 +38,8 @@ const AdminDashboard = () => {
     }
   };
 
-  // Éditer un produit
   const handleEdit = (product) => setEditingProduct(product);
 
-  // Supprimer un produit
   const handleDelete = async (id) => {
     if (!window.confirm("Supprimer ce produit ?")) return;
     try {
@@ -57,6 +52,16 @@ const AdminDashboard = () => {
       console.error(err);
       alert("Erreur lors de la suppression");
     }
+  };
+
+  const getImageUrl = (img) => {
+    if (!img) return "https://via.placeholder.com/400x400?text=Produit";
+    return img.startsWith("http") ? img : `${API_BASE}${img}`;
+  };
+
+  const getVideoUrl = (vid) => {
+    if (!vid) return null;
+    return vid.startsWith("http") ? vid : `${API_BASE}${vid}`;
   };
 
   return (
@@ -78,31 +83,20 @@ const AdminDashboard = () => {
             {products.map(product => (
               <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4" key={product._id}>
                 <div className="card h-100 shadow-sm">
-                  {/* Image */}
-                  {product.imageUrl ? (
-                    <img
-                      src={`${API_BASE}${product.imageUrl}`}
-                      alt={product.nom}
-                      className="card-img-top img-fluid"
-                      style={{ maxHeight: "250px", objectFit: "cover" }}
-                    />
-                  ) : (
-                    <img
-                      src="https://via.placeholder.com/400x400?text=Produit"
-                      alt="Produit par défaut"
-                      className="card-img-top img-fluid"
-                      style={{ maxHeight: "250px", objectFit: "cover" }}
-                    />
-                  )}
+                  <img
+                    src={getImageUrl(product.imageUrl)}
+                    alt={product.nom}
+                    className="card-img-top img-fluid"
+                    style={{ maxHeight: "250px", objectFit: "cover" }}
+                  />
 
-                  {/* Vidéo */}
                   {product.videoUrl && (
                     <video
                       controls
                       className="w-100 mt-2"
                       style={{ maxHeight: "250px", objectFit: "cover" }}
                     >
-                      <source src={`${API_BASE}${product.videoUrl}`} type="video/mp4" />
+                      <source src={getVideoUrl(product.videoUrl)} type="video/mp4" />
                       Votre navigateur ne supporte pas la vidéo.
                     </video>
                   )}

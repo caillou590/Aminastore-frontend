@@ -30,6 +30,16 @@ const ProductDetail = () => {
     fetchProduct();
   }, [id, API_URL]);
 
+  const getImageUrl = (img) => {
+    if (!img) return "https://via.placeholder.com/400x400?text=Produit";
+    return img.startsWith("http") ? img : `${API_URL}${img}`;
+  };
+
+  const getVideoUrl = (vid) => {
+    if (!vid) return null;
+    return vid.startsWith("http") ? vid : `${API_URL}${vid}`;
+  };
+
   if (loading) return <p className="text-center py-5">Chargement du produit...</p>;
   if (!product) return <p className="text-center py-5">Produit introuvable</p>;
 
@@ -54,31 +64,27 @@ const ProductDetail = () => {
   return (
     <div className="container my-5">
       <div className="row g-4">
-        {/* Image / Vidéo */}
         <div className="col-md-6">
           <div className="card shadow-sm p-3">
-            {product.image && (
-              <img
-                src={`${API_URL}${product.image}`}
-                alt={product.nom}
-                className="img-fluid rounded"
-                style={{ maxHeight: "400px", objectFit: "contain", width: "100%" }}
-              />
-            )}
-            {product.video && (
+            <img
+              src={getImageUrl(product.imageUrl)}
+              alt={product.nom}
+              className="img-fluid rounded"
+              style={{ maxHeight: "400px", objectFit: "contain", width: "100%" }}
+            />
+            {product.videoUrl && (
               <video
                 className="w-100 mt-3 rounded"
                 controls
                 style={{ maxHeight: "400px" }}
               >
-                <source src={`${API_URL}${product.video}`} type="video/mp4" />
+                <source src={getVideoUrl(product.videoUrl)} type="video/mp4" />
                 Votre navigateur ne supporte pas la vidéo.
               </video>
             )}
           </div>
         </div>
 
-        {/* Détails produit */}
         <div className="col-md-6">
           <div className="card shadow-sm p-4">
             <h2>{product.nom}</h2>
@@ -103,10 +109,7 @@ const ProductDetail = () => {
               </div>
             )}
 
-            <button
-              className="btn btn-primary w-100"
-              onClick={handleAddToCart}
-            >
+            <button className="btn btn-primary w-100" onClick={handleAddToCart}>
               Ajouter au panier
             </button>
           </div>
