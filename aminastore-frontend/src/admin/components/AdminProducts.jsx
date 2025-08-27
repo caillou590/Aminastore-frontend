@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { API_URL } from "../../config/api"; // assure-toi que API_URL = "http://localhost:5000" ou ton URL déployée
+import api from "../../api";
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
@@ -19,12 +18,11 @@ export default function AdminProducts() {
       if (categoryFilter !== "tous") params.categorie = categoryFilter;
       if (search) params.search = search;
 
-      const res = await axios.get(`${API_URL}/api/products`, { params }); // <-- URL complète
+      const res = await api.get("/products", { params });
       setProducts(res.data.products || []);
       setTotalPages(res.data.totalPages || 1);
       setError("");
     } catch (err) {
-      console.error(err);
       setError("Impossible de charger les produits");
       setProducts([]);
     } finally {
