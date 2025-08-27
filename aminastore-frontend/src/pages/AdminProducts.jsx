@@ -1,7 +1,7 @@
-// src/admin/pages/AdminProducts.jsx
+// src/pages/AdminProducts.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { API_URL, PRODUCTS } from "../../config/api";
+import { ADMIN_PRODUCTS, PRODUCT_IMAGE_DELETE, PRODUCT_VIDEO_DELETE } from "../../config/api";
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -18,21 +18,16 @@ const AdminProducts = () => {
     editId: null,
   });
 
+  const token = localStorage.getItem("adminToken");
+
   // ------------------- Fetch products -------------------
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(PRODUCTS);
-      let data = res.data?.products || res.data || [];
-
-      // Transforme imageUrl et videoUrl en URLs complètes
-      data = data.map(p => ({
-        ...p,
-        imageUrl: p.imageUrl ? `${API_URL}${p.imageUrl}` : null,
-        videoUrl: p.videoUrl ? `${API_URL}${p.videoUrl}` : null,
-      }));
-
-      setProducts(data);
+      const res = await axios.get(ADMIN_PRODUCTS, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setProducts(res.data.products || []);
     } catch (err) {
       console.error("Erreur chargement produits :", err);
       setProducts([]);
@@ -60,14 +55,13 @@ const AdminProducts = () => {
     });
 
     try {
-      const token = localStorage.getItem("adminToken");
       if (formData.editId) {
-        await axios.put(`${PRODUCTS}/${formData.editId}`, fd, {
+        await axios.put(`${ADMIN_PRODUCTS}/${formData.editId}`, fd, {
           headers: { Authorization: `Bearer ${token}` },
         });
         alert("Produit mis à jour !");
       } else {
-        await axios.post(PRODUCTS, fd, {
+        await axios.post(ADMIN_PRODUCTS, fd, {
           headers: { Authorization: `Bearer ${token}` },
         });
         alert("Produit ajouté !");
@@ -84,6 +78,7 @@ const AdminProducts = () => {
         video: null,
         editId: null,
       });
+
       fetchProducts();
     } catch (err) {
       console.error(err);
@@ -111,8 +106,9 @@ const AdminProducts = () => {
   const deleteImage = async (productId) => {
     if (!window.confirm("Supprimer l'image de ce produit ?")) return;
     try {
-      const token = localStorage.getItem("adminToken");
-      await axios.delete(`${PRODUCTS}/${productId}/image`, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.delete(PRODUCT_IMAGE_DELETE(productId), {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       alert("Image supprimée !");
       fetchProducts();
     } catch (err) {
@@ -124,8 +120,9 @@ const AdminProducts = () => {
   const deleteVideo = async (productId) => {
     if (!window.confirm("Supprimer la vidéo de ce produit ?")) return;
     try {
-      const token = localStorage.getItem("adminToken");
-      await axios.delete(`${PRODUCTS}/${productId}/video`, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.delete(PRODUCT_VIDEO_DELETE(productId), {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       alert("Vidéo supprimée !");
       fetchProducts();
     } catch (err) {
@@ -137,8 +134,9 @@ const AdminProducts = () => {
   const deleteProduct = async (productId) => {
     if (!window.confirm("Supprimer ce produit définitivement ?")) return;
     try {
-      const token = localStorage.getItem("adminToken");
-      await axios.delete(`${PRODUCTS}/${productId}`, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.delete(`${ADMIN_PRODUCTS}/${productId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       alert("Produit supprimé !");
       fetchProducts();
     } catch (err) {
