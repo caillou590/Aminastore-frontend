@@ -12,7 +12,7 @@ const Checkout = () => {
     paymentMethod: "orange",
   });
   const [orderPlaced, setOrderPlaced] = useState(false);
-  const [orderId, setOrderId] = useState(null);
+  const [orderNumber, setOrderNumber] = useState(null); // Nouveau numéro lisible
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -29,14 +29,18 @@ const Checkout = () => {
 
     setLoading(true);
     try {
+      // Appel au backend
       const res = await fetch("http://localhost:5000/api/payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cartItems, totalPrice, client: formData, method: formData.paymentMethod }),
       }).then(r => r.json());
 
+      // Générer un numéro lisible côté frontend
+      const generatedNumber = Date.now() % 100000; // exemple : 5 chiffres
+      setOrderNumber(generatedNumber);
+
       setOrderPlaced(true);
-      setOrderId(res.orderId || "N/A");
       clearCart();
     } catch (err) {
       console.error(err);
@@ -106,7 +110,7 @@ const Checkout = () => {
         <div className="order-success">
           <h2>✅ Commande enregistrée !</h2>
           <p>Merci <strong>{formData.name}</strong> pour votre commande.</p>
-          <p>ID commande : <strong>{orderId}</strong></p>
+          <p>Votre commande : <strong>Commande numéro {orderNumber}</strong></p>
 
           <div className="payment-info">
             <p>Veuillez effectuer le paiement sur :</p>
