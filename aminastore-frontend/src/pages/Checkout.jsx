@@ -1,162 +1,124 @@
-// src/pages/Checkout.jsx
 import React, { useState } from "react";
 import { useCart } from "../context/CartContext.jsx";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import "../styles/Checkout.css";
+import { FaUser, FaPhone, FaMapMarkerAlt, FaMoneyBillWave } from "react-icons/fa";
 
 const Checkout = () => {
-  const { cartItems = [], updateQuantity, totalPrice = 0 } = useCart();
-  const navigate = useNavigate();
-
-  const [form, setForm] = useState({
-    nom: "",
-    email: "",
-    telephone: "",
-    adresse: "",
+  const { cartItems, totalPrice, clearCart } = useCart();
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    paymentMethod: "orange",
   });
-
-  const [errors, setErrors] = useState({});
-  const [paymentMethod, setPaymentMethod] = useState("wave");
+  const [orderPlaced, setOrderPlaced] = useState(false);
+  const [orderId, setOrderId] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
-  const validateForm = () => {
-    const newErrors = {};
-    if (!form.nom) newErrors.nom = "Nom requis";
-    if (!form.email) newErrors.email = "Email requis";
-    if (!form.telephone) newErrors.telephone = "Téléphone requis";
-    if (!form.adresse) newErrors.adresse = "Adresse requise";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleQuantityChange = (productId, value) => {
-    const qty = parseInt(value);
-    if (qty > 0) updateQuantity(productId, qty);
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const handlePayment = async () => {
-    if (!validateForm()) return;
+    if (!cartItems || cartItems.length === 0) {
+      alert("Votre panier est vide.");
+      return;
+    }
 
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/payment", {
-        cartItems,
-        totalPrice,
-        client: form,
-        method: paymentMethod,
-      });
+      const res = await fetch("http://localhost:5000/api/payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cartItems, totalPrice, client: formData, method: formData.paymentMethod }),
+      }).then(r => r.json());
 
-      if (res.data?.payment_url) {
-        window.location.href = res.data.payment_url;
-      } else {
-        alert("Erreur lors de l'initiation du paiement.");
-      }
+      setOrderPlaced(true);
+      setOrderId(res.orderId || "N/A");
+      clearCart();
     } catch (err) {
       console.error(err);
-      alert("Erreur lors du paiement.");
+      alert("Erreur lors de l'enregistrement de la commande.");
     } finally {
       setLoading(false);
     }
   };
 
-  if (cartItems.length === 0) {
+  if ((!cartItems || cartItems.length === 0) && !orderPlaced) {
     return (
       <div className="container py-5 text-center">
         <p>Votre panier est vide.</p>
-        <button className="btn btn-primary" onClick={() => navigate("/boutique")}>
-          Retour à la boutique
-        </button>
       </div>
     );
   }
 
   return (
-    <div className="container py-5">
-      <h3 className="mb-4">Passer la commande</h3>
-      <div className="row">
-        {/* Formulaire client */}
-        <div className="col-md-6 mb-4">
-          <div className="card p-4 shadow-sm">
-            <h5 className="mb-3">Informations client</h5>
-            <div className="mb-3">
-              <label className="form-label">Nom complet</label>
-              <input type="text" name="nom" value={form.nom} onChange={handleChange} className="form-control" />
-              {errors.nom && <div className="text-danger small">{errors.nom}</div>}
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Email</label>
-              <input type="email" name="email" value={form.email} onChange={handleChange} className="form-control" />
-              {errors.email && <div className="text-danger small">{errors.email}</div>}
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Téléphone</label>
-              <input type="text" name="telephone" value={form.telephone} onChange={handleChange} className="form-control" />
-              {errors.telephone && <div className="text-danger small">{errors.telephone}</div>}
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Adresse</label>
-              <textarea name="adresse" value={form.adresse} onChange={handleChange} className="form-control"></textarea>
-              {errors.adresse && <div className="text-danger small">{errors.adresse}</div>}
+    <div className="checkout-container">
+      {!orderPlaced ? (
+        <>
+          <h2>Finaliser ma commande</h2>
+
+          <div className="mb-4">
+            <h4>Récapitulatif du panier</h4>
+            <ul>
+              {cartItems.map(item => (
+                <li key={item._id + "-" + (item.taille || "none")}>
+                  {item.nom} ({item.taille || "Taille non spécifiée"}) x {item.quantity} -{" "}
+                  {Number(item.prix * item.quantity).toLocaleString()} FCFA
+                </li>
+              ))}
+              <li className="fw-bold">Total : {Number(totalPrice).toLocaleString()} FCFA</li>
+            </ul>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="input-icon">
+              <i><FaUser /></i>
+              <input type="text" name="name" placeholder="Nom complet" value={formData.name} onChange={handleChange} required />
             </div>
 
-            <div className="mb-3">
-              <label className="form-label">Moyen de paiement</label>
-              <select className="form-select" value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
+            <div className="input-icon">
+              <i><FaPhone /></i>
+              <input type="tel" name="phone" placeholder="Numéro de téléphone" value={formData.phone} onChange={handleChange} required />
+            </div>
+
+            <div className="input-icon">
+              <i><FaMapMarkerAlt /></i>
+              <textarea name="address" placeholder="Adresse de livraison" value={formData.address} onChange={handleChange} required />
+            </div>
+
+            <div className="input-icon">
+              <i><FaMoneyBillWave /></i>
+              <select name="paymentMethod" value={formData.paymentMethod} onChange={handleChange}>
+                <option value="orange">Orange Money</option>
                 <option value="wave">Wave</option>
-                <option value="orange_money">Orange Money</option>
               </select>
             </div>
 
-            <button type="button" className="btn btn-success w-100" onClick={handlePayment} disabled={loading}>
-              {loading ? "Patientez..." : "Payer maintenant"}
+            <button type="submit" disabled={loading}>
+              {loading ? "Patientez..." : "Passer la commande"}
             </button>
-          </div>
-        </div>
+          </form>
+        </>
+      ) : (
+        <div className="order-success">
+          <h2>✅ Commande enregistrée !</h2>
+          <p>Merci <strong>{formData.name}</strong> pour votre commande.</p>
+          <p>ID commande : <strong>{orderId}</strong></p>
 
-        {/* Résumé panier */}
-        <div className="col-md-6">
-          <div className="card p-4 shadow-sm">
-            <h5 className="mb-3">Résumé du panier</h5>
-            <ul className="list-group mb-3">
-              {cartItems.map((item) => (
-                <li key={item._id + "-" + item.taille} className="list-group-item d-flex justify-content-between align-items-center">
-                  <div className="d-flex align-items-center">
-                    {item.imageUrl && (
-                      <img
-                        src={`http://localhost:5000${item.imageUrl}`}
-                        alt={item.nom}
-                        style={{ width: "60px", height: "60px", objectFit: "cover", borderRadius: "5px" }}
-                        className="me-3"
-                      />
-                    )}
-                    <div>
-                      <strong>{item.nom}</strong> {item.taille ? `(${item.taille})` : ""}
-                      <div className="mt-1 d-flex align-items-center">
-                        Quantité:{" "}
-                        <input
-                          type="number"
-                          min="1"
-                          value={item.quantity}
-                          onChange={(e) => handleQuantityChange(item._id, e.target.value)}
-                          style={{ width: "60px" }}
-                          className="form-control d-inline-block ms-2"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <span>{Number(item.prix * item.quantity).toLocaleString()} FCFA</span>
-                </li>
-              ))}
-              <li className="list-group-item d-flex justify-content-between fw-bold">
-                Total
-                <span>{Number(totalPrice).toLocaleString()} FCFA</span>
-              </li>
-            </ul>
+          <div className="payment-info">
+            <p>Veuillez effectuer le paiement sur :</p>
+            {formData.paymentMethod === "orange" ? (
+              <p>Orange Money : <span>77 108 37 63</span></p>
+            ) : (
+              <p>Wave : <span>77 108 37 63</span></p>
+            )}
+            <p>Après paiement, nous vous contacterons au <span>{formData.phone}</span>.</p>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

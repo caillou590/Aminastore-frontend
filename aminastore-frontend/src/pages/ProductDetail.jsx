@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../context/CartContext.jsx";
-import { useAuth } from "../context/AuthContext.jsx";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -10,8 +9,6 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState("");
   const { addToCart } = useCart();
-  const { user } = useAuth();
-  const navigate = useNavigate();
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -35,9 +32,13 @@ const ProductDetail = () => {
     return img.startsWith("http") ? img : `${API_URL}${img}`;
   };
 
-  const getVideoUrl = (vid) => {
-    if (!vid) return null;
-    return vid.startsWith("http") ? vid : `${API_URL}${vid}`;
+  const handleAddToCart = () => {
+    if (selectedSize === "" && product.tailles?.length > 0) {
+      alert("Veuillez choisir une taille !");
+      return;
+    }
+    addToCart({ ...product, taille: selectedSize });
+    alert("Produit ajouté au panier !");
   };
 
   if (loading) return <p className="text-center py-5">Chargement du produit...</p>;
@@ -46,20 +47,6 @@ const ProductDetail = () => {
   const tailles = Array.isArray(product.tailles)
     ? product.tailles
     : product.tailles?.split(",").map(t => t.trim()) || [];
-
-  const handleAddToCart = () => {
-    if (!user) {
-      alert("Veuillez vous connecter pour ajouter au panier !");
-      navigate("/login");
-      return;
-    }
-    if (tailles.length && !selectedSize) {
-      alert("Veuillez choisir une taille !");
-      return;
-    }
-    addToCart({ ...product, taille: selectedSize });
-    alert("Produit ajouté au panier !");
-  };
 
   return (
     <div className="container my-5">
@@ -78,7 +65,7 @@ const ProductDetail = () => {
                 controls
                 style={{ maxHeight: "400px" }}
               >
-                <source src={getVideoUrl(product.videoUrl)} type="video/mp4" />
+                <source src={product.videoUrl} type="video/mp4" />
                 Votre navigateur ne supporte pas la vidéo.
               </video>
             )}

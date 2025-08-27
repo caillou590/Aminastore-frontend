@@ -1,4 +1,3 @@
-// src/components/Cart.jsx
 import React from "react";
 import { useCart } from "../context/CartContext.jsx";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +6,7 @@ const Cart = () => {
   const { cartItems, updateQuantity, removeFromCart, totalPrice } = useCart();
   const navigate = useNavigate();
 
-  if (cartItems.length === 0)
+  if (!cartItems || cartItems.length === 0) {
     return (
       <div className="container py-5 text-center">
         <p>Votre panier est vide.</p>
@@ -16,6 +15,7 @@ const Cart = () => {
         </button>
       </div>
     );
+  }
 
   return (
     <div className="container py-5">
@@ -23,11 +23,11 @@ const Cart = () => {
       <ul className="list-group mb-3">
         {cartItems.map((item) => (
           <li
-            key={item._id + "-" + item.taille}
+            key={item._id + "-" + (item.taille || "none")}
             className="list-group-item d-flex justify-content-between align-items-center"
           >
             <div>
-              <strong>{item.nom}</strong> ({item.taille})
+              <strong>{item.nom}</strong> ({item.taille || "Taille non spécifiée"})
               <div className="mt-1">
                 Quantité:{" "}
                 <input
