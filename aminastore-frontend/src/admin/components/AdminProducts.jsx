@@ -18,7 +18,9 @@ export default function AdminProducts() {
       if (categoryFilter !== "tous") params.categorie = categoryFilter;
       if (search) params.search = search;
 
-      const res = await api.get("/products", { params });
+      // ✅ Correction ici : route complète du backend
+      const res = await api.get("/api/products", { params });
+
       setProducts(res.data.products || []);
       setTotalPages(res.data.totalPages || 1);
       setError("");
@@ -30,7 +32,9 @@ export default function AdminProducts() {
     }
   };
 
-  useEffect(() => { load(); }, [page, categoryFilter, search]);
+  useEffect(() => {
+    load();
+  }, [page, categoryFilter, search]);
 
   const prevPage = () => setPage(p => Math.max(p - 1, 1));
   const nextPage = () => setPage(p => Math.min(p + 1, totalPages));
@@ -41,7 +45,11 @@ export default function AdminProducts() {
 
       {/* Filtre et recherche */}
       <div className="d-flex mb-3 gap-2 flex-wrap">
-        <select className="form-select w-auto" value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)}>
+        <select
+          className="form-select w-auto"
+          value={categoryFilter}
+          onChange={e => setCategoryFilter(e.target.value)}
+        >
           <option value="tous">Toutes catégories</option>
           <option value="vêtements">Vêtements</option>
           <option value="chaussures">Chaussures</option>
@@ -81,9 +89,23 @@ export default function AdminProducts() {
 
           {/* Pagination */}
           <div className="d-flex justify-content-between align-items-center mt-3">
-            <button className="btn btn-sm btn-secondary" onClick={prevPage} disabled={page === 1}>Précédent</button>
-            <span>Page {page} / {totalPages}</span>
-            <button className="btn btn-sm btn-secondary" onClick={nextPage} disabled={page === totalPages}>Suivant</button>
+            <button
+              className="btn btn-sm btn-secondary"
+              onClick={prevPage}
+              disabled={page === 1}
+            >
+              Précédent
+            </button>
+            <span>
+              Page {page} / {totalPages}
+            </span>
+            <button
+              className="btn btn-sm btn-secondary"
+              onClick={nextPage}
+              disabled={page === totalPages}
+            >
+              Suivant
+            </button>
           </div>
         </>
       )}
