@@ -1,2 +1,2 @@
-// src/config.js
-export const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api";
+// Assure que le frontend utilise le bon endpoint Render
+export const API_BASE = import.meta.env.VITE_API_URL + "/api";
