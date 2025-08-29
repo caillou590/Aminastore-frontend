@@ -9,6 +9,7 @@ const AdminOrders = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // --- Récupérer toutes les commandes ---
   const fetchOrders = async () => {
     setLoading(true);
     setError("");
@@ -25,19 +26,24 @@ const AdminOrders = () => {
     }
   };
 
+  // --- Mettre à jour le statut d'une commande ---
   const updateStatus = async (id, newStatus) => {
     try {
       const token = localStorage.getItem("adminToken");
       await axios.put(`${API_BASE}/admin/orders/${id}/status`, { status: newStatus }, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setOrders(prev => prev.map(o => o._id === id ? { ...o, status: newStatus } : o));
+      setOrders(prev =>
+        prev.map(order => order._id === id ? { ...order, status: newStatus } : order)
+      );
     } catch (err) {
       alert(err.response?.data?.message || "Erreur lors de la mise à jour du statut");
     }
   };
 
-  useEffect(() => { fetchOrders(); }, []);
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
   const filteredOrders = orders.filter(order =>
     order.customerName?.toLowerCase().includes(search.toLowerCase()) ||
@@ -52,6 +58,7 @@ const AdminOrders = () => {
       {error && <div className="alert alert-danger">{error}</div>}
       {loading && <div className="alert alert-info">Chargement...</div>}
 
+      {/* Barre de recherche */}
       <div className="mb-3">
         <input
           type="text"

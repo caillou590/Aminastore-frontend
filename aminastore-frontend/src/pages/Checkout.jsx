@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useCart } from "../context/CartContext.jsx";
 import { API_BASE } from "../config";
+import "../styles/Checkout.css";
 import { FaUser, FaPhone, FaMapMarkerAlt, FaMoneyBillWave } from "react-icons/fa";
 
 const Checkout = () => {
@@ -44,7 +45,7 @@ const Checkout = () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Impossible de créer la commande");
 
-      setOrderNumber(data.order.orderNumber);
+      setOrderNumber(data.order.orderNumber || data.order._id); // fallback sur _id si pas de orderNumber
       setOrderPlaced(true);
       clearCart();
     } catch (err) {
@@ -55,11 +56,12 @@ const Checkout = () => {
     }
   };
 
-  if ((!cartItems?.length) && !orderPlaced) return (
-    <div className="container py-5 text-center">
-      <p>{error || "Votre panier est vide."}</p>
-    </div>
-  );
+  if ((!cartItems?.length) && !orderPlaced)
+    return (
+      <div className="container py-5 text-center">
+        <p>Votre panier est vide.</p>
+      </div>
+    );
 
   return (
     <div className="container my-4">
@@ -71,53 +73,42 @@ const Checkout = () => {
 
           <div className="mb-4">
             <h4>Récapitulatif du panier</h4>
-            <ul className="list-group">
+            <ul className="list-group mb-3">
               {cartItems.map(item => (
-                <li key={item._id + "-" + (item.taille || "none")} className="list-group-item d-flex justify-content-between">
-                  <span>{item.nom} ({item.taille || "Taille non spécifiée"}) x {item.quantity}</span>
-                  <span>{(item.prix * item.quantity).toLocaleString()} FCFA</span>
+                <li key={item._id + "-" + (item.taille || "none")} className="list-group-item d-flex justify-content-between align-items-center">
+                  {item.nom} ({item.taille || "Taille non spécifiée"}) x {item.quantity}
+                  <span>{Number(item.prix * item.quantity).toLocaleString()} FCFA</span>
                 </li>
               ))}
-              <li className="list-group-item fw-bold d-flex justify-content-between">
-                Total : <span>{totalPrice.toLocaleString()} FCFA</span>
+              <li className="list-group-item d-flex justify-content-between fw-bold">
+                Total
+                <span>{Number(totalPrice).toLocaleString()} FCFA</span>
               </li>
             </ul>
           </div>
 
           <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label>Nom complet</label>
-              <div className="input-group">
-                <span className="input-group-text"><FaUser /></span>
-                <input type="text" name="name" className="form-control" value={formData.name} onChange={handleChange} required />
-              </div>
+            <div className="mb-3 input-icon">
+              <FaUser className="me-2" />
+              <input type="text" name="name" className="form-control" placeholder="Nom complet" value={formData.name} onChange={handleChange} required />
             </div>
 
-            <div className="mb-3">
-              <label>Numéro de téléphone</label>
-              <div className="input-group">
-                <span className="input-group-text"><FaPhone /></span>
-                <input type="tel" name="phone" className="form-control" value={formData.phone} onChange={handleChange} required />
-              </div>
+            <div className="mb-3 input-icon">
+              <FaPhone className="me-2" />
+              <input type="tel" name="phone" className="form-control" placeholder="Numéro de téléphone" value={formData.phone} onChange={handleChange} required />
             </div>
 
-            <div className="mb-3">
-              <label>Adresse de livraison</label>
-              <div className="input-group">
-                <span className="input-group-text"><FaMapMarkerAlt /></span>
-                <textarea name="address" className="form-control" value={formData.address} onChange={handleChange} required />
-              </div>
+            <div className="mb-3 input-icon">
+              <FaMapMarkerAlt className="me-2" />
+              <textarea name="address" className="form-control" placeholder="Adresse de livraison" value={formData.address} onChange={handleChange} required />
             </div>
 
-            <div className="mb-3">
-              <label>Méthode de paiement</label>
-              <div className="input-group">
-                <span className="input-group-text"><FaMoneyBillWave /></span>
-                <select name="paymentMethod" className="form-select" value={formData.paymentMethod} onChange={handleChange}>
-                  <option value="orange">Orange Money</option>
-                  <option value="wave">Wave</option>
-                </select>
-              </div>
+            <div className="mb-3 input-icon">
+              <FaMoneyBillWave className="me-2" />
+              <select name="paymentMethod" className="form-select" value={formData.paymentMethod} onChange={handleChange}>
+                <option value="orange">Orange Money</option>
+                <option value="wave">Wave</option>
+              </select>
             </div>
 
             <button type="submit" className="btn btn-primary w-100" disabled={loading}>
@@ -126,12 +117,19 @@ const Checkout = () => {
           </form>
         </>
       ) : (
-        <div className="alert alert-success text-center">
+        <div className="text-center">
           <h2>✅ Commande enregistrée !</h2>
           <p>Merci <strong>{formData.name}</strong> pour votre commande.</p>
-          <p>Commande numéro : <strong>{orderNumber}</strong></p>
-          <p>Veuillez effectuer le paiement via {formData.paymentMethod === "orange" ? "Orange Money" : "Wave"} au 77 108 37 63.</p>
-          <p>Après paiement, nous vous contacterons au <strong>{formData.phone}</strong>.</p>
+          <p>Votre commande : <strong>Commande numéro {orderNumber}</strong></p>
+          <div className="alert alert-info mt-3">
+            <p>Veuillez effectuer le paiement sur :</p>
+            {formData.paymentMethod === "orange" ? (
+              <p>Orange Money : <strong>77 108 37 63</strong></p>
+            ) : (
+              <p>Wave : <strong>77 108 37 63</strong></p>
+            )}
+            <p>Après paiement, nous vous contacterons au <strong>{formData.phone}</strong>.</p>
+          </div>
         </div>
       )}
     </div>
