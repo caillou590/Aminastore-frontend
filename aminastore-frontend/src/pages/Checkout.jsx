@@ -13,8 +13,8 @@ const Checkout = () => {
     paymentMethod: "orange",
   });
   const [orderPlaced, setOrderPlaced] = React.useState(false);
+  const [orderNumber, setOrderNumber] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
-  const [orderNumber, setOrderNumber] = React.useState(null); // nouveau état
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,6 +24,7 @@ const Checkout = () => {
     if (!cartItems?.length) return alert("Votre panier est vide.");
 
     setLoading(true);
+
     try {
       const orderData = {
         products: cartItems.map((item) => ({
@@ -38,22 +39,23 @@ const Checkout = () => {
         paymentMethod: formData.paymentMethod,
       };
 
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/orders`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData),
       });
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.message || "Impossible de créer la commande");
+      let data = {};
+      try {
+        data = await res.json();
+      } catch {
+        console.warn("Pas de JSON renvoyé par le backend");
       }
 
-      const data = await res.json();
-      // Génération d'un numéro de commande simple si backend ne le fournit pas
-      const generatedOrderNumber = data.orderNumber || Math.floor(100000 + Math.random() * 900000);
+      if (!res.ok) throw new Error(data.message || "Impossible de créer la commande");
 
-      setOrderNumber(generatedOrderNumber);
+      // On récupère le numéro de commande si disponible
+      setOrderNumber(data.orderNumber || "N/A");
       setOrderPlaced(true);
       clearCart();
     } catch (err) {
@@ -77,7 +79,86 @@ const Checkout = () => {
       {!orderPlaced ? (
         <>
           <h2 className="mb-4">Finaliser ma commande</h2>
-          {/* ... ton formulaire et récapitulatif du panier ... */}
+
+          {/* Récapitulatif du panier */}
+          <div className="mb-4">
+            <h4>Récapitulatif du panier</h4>
+            <ul className="list-group">
+              {cartItems.map((item) => (
+                <li
+                  key={item._id + "-" + (item.taille || "none")}
+                  className="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <div>
+                    {item.nom} x {item.quantity}
+                    {item.taille && (
+                      <span className="badge bg-info ms-2">Taille: {item.taille}</span>
+                    )}
+                  </div>
+                  <span>{Number(item.prix * item.quantity).toLocaleString()} FCFA</span>
+                </li>
+              ))}
+              <li className="list-group-item fw-bold d-flex justify-content-between">
+                Total : <span>{Number(totalPrice).toLocaleString()} FCFA</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Formulaire */}
+          <form onSubmit={handleSubmit} className="row g-3">
+            <div className="col-md-6">
+              <label className="form-label"><FaUser /> Nom complet</label>
+              <input
+                type="text"
+                name="name"
+                className="form-control"
+                placeholder="Nom complet"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label"><FaPhone /> Numéro de téléphone</label>
+              <input
+                type="tel"
+                name="phone"
+                className="form-control"
+                placeholder="Numéro de téléphone"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="col-12">
+              <label className="form-label"><FaMapMarkerAlt /> Adresse de livraison</label>
+              <textarea
+                name="address"
+                className="form-control"
+                placeholder="Adresse de livraison"
+                value={formData.address}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label"><FaMoneyBillWave /> Méthode de paiement</label>
+              <select
+                name="paymentMethod"
+                className="form-select"
+                value={formData.paymentMethod}
+                onChange={handleChange}
+              >
+                <option value="orange">Orange Money</option>
+                <option value="wave">Wave</option>
+              </select>
+            </div>
+            <div className="col-12">
+              <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+                {loading ? "Patientez..." : "Passer la commande"}
+              </button>
+            </div>
+          </form>
         </>
       ) : (
         <div className="order-success text-center">
@@ -85,7 +166,7 @@ const Checkout = () => {
           <p>Merci <strong>{formData.name}</strong> pour votre commande.</p>
           <p>Votre commande : <strong>Commande numéro {orderNumber}</strong></p>
 
-          <div className="payment-info">
+          <div className="payment-info mt-3">
             <p>Veuillez effectuer le paiement sur :</p>
             {formData.paymentMethod === "orange" ? (
               <p>Orange Money : <span>77 108 37 63</span></p>
