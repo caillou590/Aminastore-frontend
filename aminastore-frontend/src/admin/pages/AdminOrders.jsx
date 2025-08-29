@@ -8,7 +8,6 @@ const AdminOrders = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // --- Récupérer toutes les commandes ---
   const fetchOrders = async () => {
     try {
       setLoading(true);
@@ -25,7 +24,6 @@ const AdminOrders = () => {
     }
   };
 
-  // --- Mettre à jour le statut d'une commande ---
   const updateStatus = async (id, newStatus) => {
     try {
       const token = localStorage.getItem("adminToken");
@@ -52,14 +50,11 @@ const AdminOrders = () => {
 
   return (
     <div className="min-vh-100 bg-light">
-      {/* Header */}
       <header className="bg-primary text-white p-3">
         <h1 className="h5 m-0 text-center">📦 Gestion des commandes</h1>
       </header>
 
-      {/* Contenu */}
       <main className="p-3">
-        {/* Barre de recherche */}
         <div className="mb-3">
           <input
             type="text"
@@ -98,11 +93,9 @@ const AdminOrders = () => {
                       <ul className="list-unstyled m-0">
                         {order.items?.map((i, idx) => (
                           <li key={idx}>
-                            {i.product?.nom} — {i.quantity}x{" "}
+                            {i.product?.nom} — {i.quantity}x
                             {i.taille && (
-                              <span className="badge bg-info text-dark">
-                                Taille: {i.taille}
-                              </span>
+                              <span className="badge bg-info ms-2">Taille: {i.taille}</span>
                             )}
                           </li>
                         ))}

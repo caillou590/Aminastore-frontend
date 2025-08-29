@@ -1,37 +1,25 @@
-// src/pages/Checkout.jsx
-import React, { useState } from "react";
+import React from "react";
 import { useCart } from "../context/CartContext.jsx";
 import "../styles/Checkout.css";
 import { FaUser, FaPhone, FaMapMarkerAlt, FaMoneyBillWave } from "react-icons/fa";
 
 const Checkout = () => {
-  const { cartItems, totalPrice, clearCart, updateCartItem } = useCart();
-  const [formData, setFormData] = useState({
+  const { cartItems, totalPrice, clearCart } = useCart();
+  const [formData, setFormData] = React.useState({
     name: "",
     phone: "",
     address: "",
     paymentMethod: "orange",
   });
-  const [orderPlaced, setOrderPlaced] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [orderPlaced, setOrderPlaced] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleTailleChange = (id, taille) => {
-    updateCartItem(id, { taille });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!cartItems?.length) return alert("Votre panier est vide.");
-
-    // Vérifier que chaque produit avec tailles a bien une taille choisie
-    for (const item of cartItems) {
-      if (item.tailles?.length > 0 && !item.taille) {
-        return alert(`Veuillez choisir une taille pour ${item.nom}`);
-      }
-    }
 
     setLoading(true);
     try {
@@ -39,7 +27,7 @@ const Checkout = () => {
         products: cartItems.map((item) => ({
           productId: item._id,
           quantity: item.quantity,
-          taille: item.taille || null, // taille bien envoyée
+          taille: item.taille || null, // taille choisie dans le panier
         })),
         total: totalPrice,
         customerName: formData.name.trim(),
@@ -81,7 +69,6 @@ const Checkout = () => {
         <>
           <h2 className="mb-4">Finaliser ma commande</h2>
 
-          {/* Récapitulatif panier */}
           <div className="mb-4">
             <h4>Récapitulatif du panier</h4>
             <ul className="list-group">
@@ -91,26 +78,10 @@ const Checkout = () => {
                   className="list-group-item d-flex justify-content-between align-items-center"
                 >
                   <div>
-                    {item.nom}
-                    {item.tailles && item.tailles.length > 0 && (
-                      <select
-                        className="form-select form-select-sm d-inline-block w-auto ms-2"
-                        value={item.taille || ""}
-                        onChange={(e) =>
-                          handleTailleChange(item._id, e.target.value)
-                        }
-                        required
-                      >
-                        <option value="">-- Taille --</option>
-                        {item.tailles.map((t) => (
-                          <option key={t} value={t}>
-                            {t}
-                          </option>
-                        ))}
-                      </select>
+                    {item.nom} x {item.quantity}
+                    {item.taille && (
+                      <span className="badge bg-info ms-2">Taille: {item.taille}</span>
                     )}
-                    {" x "}
-                    {item.quantity}
                   </div>
                   <span>
                     {Number(item.prix * item.quantity).toLocaleString()} FCFA
@@ -123,7 +94,6 @@ const Checkout = () => {
             </ul>
           </div>
 
-          {/* Formulaire */}
           <form onSubmit={handleSubmit} className="row g-3">
             <div className="col-md-6">
               <label className="form-label">
