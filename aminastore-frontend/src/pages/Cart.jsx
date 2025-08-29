@@ -17,6 +17,10 @@ const Cart = () => {
     );
   }
 
+  const handleTailleChange = (productId, newTaille) => {
+    updateQuantity(productId, cartItems.find(item => item._id === productId && item.taille === newTaille)?.quantity || 1, newTaille);
+  };
+
   return (
     <div className="container py-5">
       <h3>Panier</h3>
@@ -27,7 +31,19 @@ const Cart = () => {
             className="list-group-item d-flex justify-content-between align-items-center"
           >
             <div>
-              <strong>{item.nom}</strong> ({item.taille || "Taille non spécifiée"})
+              <strong>{item.nom}</strong>
+              {item.tailles?.length > 0 && (
+                <select
+                  className="form-select d-inline-block w-auto ms-2"
+                  value={item.taille || ""}
+                  onChange={(e) => handleTailleChange(item._id, e.target.value)}
+                >
+                  <option value="">-- Taille --</option>
+                  {item.tailles.map((t) => (
+                    <option key={t} value={t}>{t}</option>
+                  ))}
+                </select>
+              )}
               <div className="mt-1">
                 Quantité:{" "}
                 <input

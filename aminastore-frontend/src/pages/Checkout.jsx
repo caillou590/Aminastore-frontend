@@ -1,3 +1,4 @@
+// src/pages/Checkout.jsx
 import React from "react";
 import { useCart } from "../context/CartContext.jsx";
 import "../styles/Checkout.css";
@@ -27,7 +28,7 @@ const Checkout = () => {
         products: cartItems.map((item) => ({
           productId: item._id,
           quantity: item.quantity,
-          taille: item.taille || null, // taille choisie dans le panier
+          taille: item.taille || null, // taille déjà choisie dans le panier
         })),
         total: totalPrice,
         customerName: formData.name.trim(),
@@ -69,6 +70,7 @@ const Checkout = () => {
         <>
           <h2 className="mb-4">Finaliser ma commande</h2>
 
+          {/* Récapitulatif du panier */}
           <div className="mb-4">
             <h4>Récapitulatif du panier</h4>
             <ul className="list-group">
@@ -83,9 +85,7 @@ const Checkout = () => {
                       <span className="badge bg-info ms-2">Taille: {item.taille}</span>
                     )}
                   </div>
-                  <span>
-                    {Number(item.prix * item.quantity).toLocaleString()} FCFA
-                  </span>
+                  <span>{Number(item.prix * item.quantity).toLocaleString()} FCFA</span>
                 </li>
               ))}
               <li className="list-group-item fw-bold d-flex justify-content-between">
@@ -94,11 +94,10 @@ const Checkout = () => {
             </ul>
           </div>
 
+          {/* Formulaire */}
           <form onSubmit={handleSubmit} className="row g-3">
             <div className="col-md-6">
-              <label className="form-label">
-                <FaUser /> Nom complet
-              </label>
+              <label className="form-label"><FaUser /> Nom complet</label>
               <input
                 type="text"
                 name="name"
@@ -110,9 +109,7 @@ const Checkout = () => {
               />
             </div>
             <div className="col-md-6">
-              <label className="form-label">
-                <FaPhone /> Numéro de téléphone
-              </label>
+              <label className="form-label"><FaPhone /> Numéro de téléphone</label>
               <input
                 type="tel"
                 name="phone"
@@ -124,9 +121,7 @@ const Checkout = () => {
               />
             </div>
             <div className="col-12">
-              <label className="form-label">
-                <FaMapMarkerAlt /> Adresse de livraison
-              </label>
+              <label className="form-label"><FaMapMarkerAlt /> Adresse de livraison</label>
               <textarea
                 name="address"
                 className="form-control"
@@ -137,9 +132,7 @@ const Checkout = () => {
               />
             </div>
             <div className="col-md-6">
-              <label className="form-label">
-                <FaMoneyBillWave /> Méthode de paiement
-              </label>
+              <label className="form-label"><FaMoneyBillWave /> Méthode de paiement</label>
               <select
                 name="paymentMethod"
                 className="form-select"
@@ -151,11 +144,7 @@ const Checkout = () => {
               </select>
             </div>
             <div className="col-12">
-              <button
-                type="submit"
-                className="btn btn-primary w-100"
-                disabled={loading}
-              >
+              <button type="submit" className="btn btn-primary w-100" disabled={loading}>
                 {loading ? "Patientez..." : "Passer la commande"}
               </button>
             </div>
