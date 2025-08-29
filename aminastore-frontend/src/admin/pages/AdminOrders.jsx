@@ -59,7 +59,7 @@ const AdminOrders = () => {
     <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-blue-600 text-white p-4">
-        <h1 className="text-xl font-bold">📦 Gestion des commandes</h1>
+        <h1 className="text-dark">📦 Gestion des commandes</h1>
       </header>
 
       {/* Contenu */}
@@ -127,9 +127,7 @@ const AdminOrders = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white text-center p-4 mt-auto">
-        <p>© 2025 AminaStore - Admin Dashboard</p>
-      </footer>
+      
     </div>
   );
 };
