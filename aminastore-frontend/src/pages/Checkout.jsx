@@ -1,10 +1,10 @@
-// src/pages/Checkout.jsx
 import React, { useState } from "react";
 import { useCart } from "../context/CartContext.jsx";
 import "../styles/Checkout.css";
+import { FaUser, FaPhone, FaMapMarkerAlt, FaMoneyBillWave } from "react-icons/fa";
 
 const Checkout = () => {
-  const { cartItems, totalPrice, clearCart } = useCart();
+  const { cartItems, totalPrice, clearCart, updateCartItem } = useCart();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -16,6 +16,10 @@ const Checkout = () => {
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  const handleTailleChange = (id, taille) => {
+    updateCartItem(id, { taille });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!cartItems?.length) return alert("Votre panier est vide.");
@@ -23,7 +27,11 @@ const Checkout = () => {
     setLoading(true);
     try {
       const orderData = {
-        products: cartItems.map(item => ({ productId: item._id, quantity: item.quantity })),
+        products: cartItems.map(item => ({
+          productId: item._id,
+          quantity: item.quantity,
+          taille: item.taille || null,
+        })),
         total: totalPrice,
         customerName: formData.name,
         customerPhone: formData.phone,
@@ -54,87 +62,71 @@ const Checkout = () => {
     return <div className="container py-5 text-center"><p>Votre panier est vide.</p></div>;
 
   return (
-    <div className="container py-4">
+    <div className="checkout-container container py-4">
       {!orderPlaced ? (
         <>
-          <h2 className="mb-3">Finaliser ma commande</h2>
+          <h2 className="mb-4">Finaliser ma commande</h2>
 
           <div className="mb-4">
-            <h5>Récapitulatif du panier</h5>
-            <ul className="list-group mb-2">
+            <h4>Récapitulatif du panier</h4>
+            <ul className="list-group">
               {cartItems.map(item => (
-                <li key={item._id + "-" + (item.taille || "none")} className="list-group-item d-flex justify-content-between align-items-center">
-                  {item.nom} ({item.taille || "Taille non spécifiée"}) x {item.quantity}
-                  <span>{(item.prix * item.quantity).toLocaleString()} FCFA</span>
+                <li key={item._id} className="list-group-item d-flex justify-content-between align-items-center">
+                  <div>
+                    {item.nom} 
+                    {item.tailles && item.tailles.length > 0 && (
+                      <select
+                        className="form-select form-select-sm d-inline-block w-auto ms-2"
+                        value={item.taille || item.tailles[0]}
+                        onChange={(e) => handleTailleChange(item._id, e.target.value)}
+                      >
+                        {item.tailles.map(t => (
+                          <option key={t} value={t}>{t}</option>
+                        ))}
+                      </select>
+                    )}
+                    x {item.quantity}
+                  </div>
+                  <span>{Number(item.prix * item.quantity).toLocaleString()} FCFA</span>
                 </li>
               ))}
-              <li className="list-group-item d-flex justify-content-between fw-bold">
-                Total
-                <span>{totalPrice.toLocaleString()} FCFA</span>
+              <li className="list-group-item fw-bold d-flex justify-content-between">
+                Total : <span>{Number(totalPrice).toLocaleString()} FCFA</span>
               </li>
             </ul>
           </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <input
-                type="text"
-                name="name"
-                placeholder="Nom complet"
-                className="form-control"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
+          <form onSubmit={handleSubmit} className="row g-3">
+            <div className="col-md-6">
+              <label className="form-label"><FaUser /> Nom complet</label>
+              <input type="text" name="name" className="form-control" placeholder="Nom complet" value={formData.name} onChange={handleChange} required />
             </div>
-
-            <div className="mb-3">
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Numéro de téléphone"
-                className="form-control"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-              />
+            <div className="col-md-6">
+              <label className="form-label"><FaPhone /> Numéro de téléphone</label>
+              <input type="tel" name="phone" className="form-control" placeholder="Numéro de téléphone" value={formData.phone} onChange={handleChange} required />
             </div>
-
-            <div className="mb-3">
-              <textarea
-                name="address"
-                placeholder="Adresse de livraison"
-                className="form-control"
-                value={formData.address}
-                onChange={handleChange}
-                required
-              />
+            <div className="col-12">
+              <label className="form-label"><FaMapMarkerAlt /> Adresse de livraison</label>
+              <textarea name="address" className="form-control" placeholder="Adresse de livraison" value={formData.address} onChange={handleChange} required />
             </div>
-
-            <div className="mb-3">
-              <select
-                name="paymentMethod"
-                className="form-select"
-                value={formData.paymentMethod}
-                onChange={handleChange}
-              >
+            <div className="col-md-6">
+              <label className="form-label"><FaMoneyBillWave /> Méthode de paiement</label>
+              <select name="paymentMethod" className="form-select" value={formData.paymentMethod} onChange={handleChange}>
                 <option value="orange">Orange Money</option>
                 <option value="wave">Wave</option>
               </select>
             </div>
-
-            <button type="submit" className="btn btn-primary w-100" disabled={loading}>
-              {loading ? "Patientez..." : "Passer la commande"}
-            </button>
+            <div className="col-12">
+              <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+                {loading ? "Patientez..." : "Passer la commande"}
+              </button>
+            </div>
           </form>
         </>
       ) : (
-        <div className="alert alert-success mt-3">
+        <div className="alert alert-success text-center">
           <h4>✅ Commande enregistrée !</h4>
-          <p>Merci <strong>{formData.name}</strong> pour votre commande.</p>
-          <p>Veuillez effectuer le paiement via :</p>
-          <p>{formData.paymentMethod === "orange" ? "Orange Money" : "Wave"} : <strong>77 108 37 63</strong></p>
-          <p>Après paiement, nous vous contacterons au <strong>{formData.phone}</strong>.</p>
+          <p>Merci pour votre commande. Nous vous contacterons bientôt.</p>
         </div>
       )}
     </div>

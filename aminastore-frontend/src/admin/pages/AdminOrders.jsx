@@ -18,7 +18,6 @@ const AdminOrders = () => {
       const response = await axios.get(`${API_BASE}/admin/orders`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       setOrders(Array.isArray(response.data.orders) ? response.data.orders : []);
     } catch (err) {
       setError(err.response?.data?.message || "Erreur lors du chargement des commandes");
@@ -34,7 +33,6 @@ const AdminOrders = () => {
       await axios.put(`${API_BASE}/admin/orders/${id}/status`, { status: newStatus }, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       setOrders(prev =>
         prev.map(order => order._id === id ? { ...order, status: newStatus } : order)
       );
@@ -57,7 +55,7 @@ const AdminOrders = () => {
     <div className="min-vh-100 bg-light">
       {/* Header */}
       <header className="bg-primary text-white p-3">
-        <h1 className="h4 m-0">📦 Gestion des commandes</h1>
+        <h1 className="h5 m-0 text-center">📦 Gestion des commandes</h1>
       </header>
 
       {/* Contenu */}
@@ -73,20 +71,19 @@ const AdminOrders = () => {
           />
         </div>
 
-        {loading && <p>Chargement...</p>}
-        {error && <p className="text-danger">{error}</p>}
-        {!loading && filteredOrders.length === 0 && <p>Aucune commande trouvée.</p>}
+        {loading && <p className="text-center">Chargement...</p>}
+        {error && <p className="text-danger text-center">{error}</p>}
+        {!loading && filteredOrders.length === 0 && <p className="text-center">Aucune commande trouvée.</p>}
 
         {!loading && filteredOrders.length > 0 && (
           <div className="table-responsive">
-            <table className="table table-bordered table-hover text-center align-middle">
-              <thead className="table-light">
+            <table className="table table-bordered table-hover align-middle text-center">
+              <thead className="table-dark">
                 <tr>
                   <th>Nom</th>
                   <th>Téléphone</th>
                   <th>Adresse</th>
-                  <th>Produit(s)</th>
-                  <th>Quantité</th>
+                  <th>Produits</th>
                   <th>Total</th>
                   <th>Statut</th>
                   <th>Action</th>
@@ -98,9 +95,21 @@ const AdminOrders = () => {
                     <td>{order.customerName}</td>
                     <td>{order.customerPhone}</td>
                     <td>{order.customerAddress}</td>
-                    <td>{order.items?.map(i => i.product?.nom).join(", ")}</td>
-                    <td>{order.items?.map(i => i.quantity).join(", ")}</td>
-                    <td>{order.total.toLocaleString()} FCFA</td>
+                    <td className="text-start">
+                      <ul className="list-unstyled m-0">
+                        {order.items?.map((i, index) => (
+                          <li key={index}>
+                            {i.product?.nom} — {i.quantity}x{" "}
+                            {i.taille && (
+                              <span className="badge bg-info">
+                                Taille: {i.taille}
+                              </span>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </td>
+                    <td><strong>{order.total.toLocaleString()} FCFA</strong></td>
                     <td>{order.status}</td>
                     <td>
                       <select
