@@ -23,12 +23,13 @@ const Checkout = () => {
     if (!cartItems?.length) return alert("Votre panier est vide.");
 
     setLoading(true);
+
     try {
       const orderData = {
         products: cartItems.map((item) => ({
           productId: item._id,
           quantity: item.quantity,
-          taille: item.taille || null, // taille déjà choisie dans le panier
+          taille: item.taille || null,
         })),
         total: totalPrice,
         customerName: formData.name.trim(),
@@ -37,13 +38,20 @@ const Checkout = () => {
         paymentMethod: formData.paymentMethod,
       };
 
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/orders`, {
+      // Assure-toi que ton backend expose /api/orders
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData),
       });
 
-      const data = await res.json();
+      let data = {};
+      try {
+        data = await res.json();
+      } catch {
+        console.warn("Pas de JSON renvoyé par le backend");
+      }
+
       if (!res.ok) throw new Error(data.message || "Impossible de créer la commande");
 
       setOrderPlaced(true);
@@ -76,7 +84,7 @@ const Checkout = () => {
             <ul className="list-group">
               {cartItems.map((item) => (
                 <li
-                  key={item._id}
+                  key={item._id + "-" + (item.taille || "none")}
                   className="list-group-item d-flex justify-content-between align-items-center"
                 >
                   <div>

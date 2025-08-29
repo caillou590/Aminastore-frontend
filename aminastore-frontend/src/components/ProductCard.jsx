@@ -1,16 +1,8 @@
-import React, { useState } from "react";
-import { useCart } from "../context/CartContext.jsx";
+import React from "react";
 import { Link } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-  const { addToCart } = useCart();
-  const [selectedTaille, setSelectedTaille] = useState(product.tailles?.[0] || null);
-
-  const handleAddToCart = () => {
-    addToCart(product, selectedTaille);
-    alert("Produit ajouté au panier !");
-  };
 
   return (
     <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
@@ -31,28 +23,25 @@ const ProductCard = ({ product }) => {
           />
         )}
 
+        {product.videoUrl && (
+          <video
+            controls
+            className="w-100 mt-2"
+            style={{ height: 220, objectFit: "cover", borderRadius: "4px" }}
+          >
+            <source
+              src={product.videoUrl.startsWith("http") ? product.videoUrl : `${API_URL}${product.videoUrl}`}
+              type="video/mp4"
+            />
+            Votre navigateur ne supporte pas la vidéo.
+          </video>
+        )}
+
         <div className="card-body text-center">
           <h6 className="card-title mb-1">{product.nom}</h6>
           <small className="text-muted d-block mb-2">{product.categorie || ""}</small>
-          <div className="fw-bold text-danger mb-2">{product.prix?.toLocaleString()} FCFA</div>
-
-          {product.tailles?.length > 0 && (
-            <select
-              className="form-select form-select-sm mb-2"
-              value={selectedTaille || ""}
-              onChange={(e) => setSelectedTaille(e.target.value)}
-            >
-              {product.tailles.map((t) => (
-                <option key={t} value={t}>{t}</option>
-              ))}
-            </select>
-          )}
-
-          <button className="btn btn-outline-dark btn-sm w-100" onClick={handleAddToCart}>
-            Ajouter au panier
-          </button>
-
-          <Link to={`/produit/${product._id}`} className="btn btn-outline-primary btn-sm w-100 mt-2">
+          <div className="fw-bold text-danger mb-3">{product.prix?.toLocaleString()} FCFA</div>
+          <Link to={`/produit/${product._id}`} className="btn btn-outline-dark btn-sm">
             Voir le produit
           </Link>
         </div>
