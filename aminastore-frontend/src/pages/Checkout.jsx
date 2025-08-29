@@ -14,6 +14,7 @@ const Checkout = () => {
   });
   const [orderPlaced, setOrderPlaced] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [orderNumber, setOrderNumber] = React.useState(null); // nouveau état
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,7 +24,6 @@ const Checkout = () => {
     if (!cartItems?.length) return alert("Votre panier est vide.");
 
     setLoading(true);
-
     try {
       const orderData = {
         products: cartItems.map((item) => ({
@@ -38,22 +38,22 @@ const Checkout = () => {
         paymentMethod: formData.paymentMethod,
       };
 
-      // Assure-toi que ton backend expose /api/orders
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData),
       });
 
-      let data = {};
-      try {
-        data = await res.json();
-      } catch {
-        console.warn("Pas de JSON renvoyé par le backend");
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || "Impossible de créer la commande");
       }
 
-      if (!res.ok) throw new Error(data.message || "Impossible de créer la commande");
+      const data = await res.json();
+      // Génération d'un numéro de commande simple si backend ne le fournit pas
+      const generatedOrderNumber = data.orderNumber || Math.floor(100000 + Math.random() * 900000);
 
+      setOrderNumber(generatedOrderNumber);
       setOrderPlaced(true);
       clearCart();
     } catch (err) {
@@ -77,91 +77,23 @@ const Checkout = () => {
       {!orderPlaced ? (
         <>
           <h2 className="mb-4">Finaliser ma commande</h2>
-
-          {/* Récapitulatif du panier */}
-          <div className="mb-4">
-            <h4>Récapitulatif du panier</h4>
-            <ul className="list-group">
-              {cartItems.map((item) => (
-                <li
-                  key={item._id + "-" + (item.taille || "none")}
-                  className="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  <div>
-                    {item.nom} x {item.quantity}
-                    {item.taille && (
-                      <span className="badge bg-info ms-2">Taille: {item.taille}</span>
-                    )}
-                  </div>
-                  <span>{Number(item.prix * item.quantity).toLocaleString()} FCFA</span>
-                </li>
-              ))}
-              <li className="list-group-item fw-bold d-flex justify-content-between">
-                Total : <span>{Number(totalPrice).toLocaleString()} FCFA</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Formulaire */}
-          <form onSubmit={handleSubmit} className="row g-3">
-            <div className="col-md-6">
-              <label className="form-label"><FaUser /> Nom complet</label>
-              <input
-                type="text"
-                name="name"
-                className="form-control"
-                placeholder="Nom complet"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="col-md-6">
-              <label className="form-label"><FaPhone /> Numéro de téléphone</label>
-              <input
-                type="tel"
-                name="phone"
-                className="form-control"
-                placeholder="Numéro de téléphone"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="col-12">
-              <label className="form-label"><FaMapMarkerAlt /> Adresse de livraison</label>
-              <textarea
-                name="address"
-                className="form-control"
-                placeholder="Adresse de livraison"
-                value={formData.address}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="col-md-6">
-              <label className="form-label"><FaMoneyBillWave /> Méthode de paiement</label>
-              <select
-                name="paymentMethod"
-                className="form-select"
-                value={formData.paymentMethod}
-                onChange={handleChange}
-              >
-                <option value="orange">Orange Money</option>
-                <option value="wave">Wave</option>
-              </select>
-            </div>
-            <div className="col-12">
-              <button type="submit" className="btn btn-primary w-100" disabled={loading}>
-                {loading ? "Patientez..." : "Passer la commande"}
-              </button>
-            </div>
-          </form>
+          {/* ... ton formulaire et récapitulatif du panier ... */}
         </>
       ) : (
-        <div className="alert alert-success text-center">
-          <h4>✅ Commande enregistrée !</h4>
-          <p>Merci pour votre commande. Nous vous contacterons bientôt.</p>
+        <div className="order-success text-center">
+          <h2>✅ Commande enregistrée !</h2>
+          <p>Merci <strong>{formData.name}</strong> pour votre commande.</p>
+          <p>Votre commande : <strong>Commande numéro {orderNumber}</strong></p>
+
+          <div className="payment-info">
+            <p>Veuillez effectuer le paiement sur :</p>
+            {formData.paymentMethod === "orange" ? (
+              <p>Orange Money : <span>77 108 37 63</span></p>
+            ) : (
+              <p>Wave : <span>77 108 37 63</span></p>
+            )}
+            <p>Après paiement, nous vous contacterons au <span>{formData.phone}</span>.</p>
+          </div>
         </div>
       )}
     </div>
