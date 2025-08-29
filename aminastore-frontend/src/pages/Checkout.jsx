@@ -1,3 +1,4 @@
+// src/pages/Checkout.jsx
 import React, { useState } from "react";
 import { useCart } from "../context/CartContext.jsx";
 import "../styles/Checkout.css";
@@ -14,7 +15,8 @@ const Checkout = () => {
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleTailleChange = (id, taille) => {
     updateCartItem(id, { taille });
@@ -24,25 +26,32 @@ const Checkout = () => {
     e.preventDefault();
     if (!cartItems?.length) return alert("Votre panier est vide.");
 
+    // Vérifier que chaque produit avec tailles a bien une taille choisie
+    for (const item of cartItems) {
+      if (item.tailles?.length > 0 && !item.taille) {
+        return alert(`Veuillez choisir une taille pour ${item.nom}`);
+      }
+    }
+
     setLoading(true);
     try {
       const orderData = {
-        products: cartItems.map(item => ({
+        products: cartItems.map((item) => ({
           productId: item._id,
           quantity: item.quantity,
-          taille: item.taille || null,
+          taille: item.taille || null, // taille bien envoyée
         })),
         total: totalPrice,
-        customerName: formData.name,
-        customerPhone: formData.phone,
-        customerAddress: formData.address,
-        paymentMethod: formData.paymentMethod
+        customerName: formData.name.trim(),
+        customerPhone: formData.phone.trim(),
+        customerAddress: formData.address.trim(),
+        paymentMethod: formData.paymentMethod,
       };
 
       const res = await fetch(`${import.meta.env.VITE_API_BASE}/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderData)
+        body: JSON.stringify(orderData),
       });
 
       const data = await res.json();
@@ -58,8 +67,13 @@ const Checkout = () => {
     }
   };
 
-  if ((!cartItems?.length) && !orderPlaced)
-    return <div className="container py-5 text-center"><p>Votre panier est vide.</p></div>;
+  if ((!cartItems?.length) && !orderPlaced) {
+    return (
+      <div className="container py-5 text-center">
+        <p>Votre panier est vide.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="checkout-container container py-4">
@@ -67,27 +81,40 @@ const Checkout = () => {
         <>
           <h2 className="mb-4">Finaliser ma commande</h2>
 
+          {/* Récapitulatif panier */}
           <div className="mb-4">
             <h4>Récapitulatif du panier</h4>
             <ul className="list-group">
-              {cartItems.map(item => (
-                <li key={item._id} className="list-group-item d-flex justify-content-between align-items-center">
+              {cartItems.map((item) => (
+                <li
+                  key={item._id}
+                  className="list-group-item d-flex justify-content-between align-items-center"
+                >
                   <div>
-                    {item.nom} 
+                    {item.nom}
                     {item.tailles && item.tailles.length > 0 && (
                       <select
                         className="form-select form-select-sm d-inline-block w-auto ms-2"
-                        value={item.taille || item.tailles[0]}
-                        onChange={(e) => handleTailleChange(item._id, e.target.value)}
+                        value={item.taille || ""}
+                        onChange={(e) =>
+                          handleTailleChange(item._id, e.target.value)
+                        }
+                        required
                       >
-                        {item.tailles.map(t => (
-                          <option key={t} value={t}>{t}</option>
+                        <option value="">-- Taille --</option>
+                        {item.tailles.map((t) => (
+                          <option key={t} value={t}>
+                            {t}
+                          </option>
                         ))}
                       </select>
                     )}
-                    x {item.quantity}
+                    {" x "}
+                    {item.quantity}
                   </div>
-                  <span>{Number(item.prix * item.quantity).toLocaleString()} FCFA</span>
+                  <span>
+                    {Number(item.prix * item.quantity).toLocaleString()} FCFA
+                  </span>
                 </li>
               ))}
               <li className="list-group-item fw-bold d-flex justify-content-between">
@@ -96,28 +123,69 @@ const Checkout = () => {
             </ul>
           </div>
 
+          {/* Formulaire */}
           <form onSubmit={handleSubmit} className="row g-3">
             <div className="col-md-6">
-              <label className="form-label"><FaUser /> Nom complet</label>
-              <input type="text" name="name" className="form-control" placeholder="Nom complet" value={formData.name} onChange={handleChange} required />
+              <label className="form-label">
+                <FaUser /> Nom complet
+              </label>
+              <input
+                type="text"
+                name="name"
+                className="form-control"
+                placeholder="Nom complet"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div className="col-md-6">
-              <label className="form-label"><FaPhone /> Numéro de téléphone</label>
-              <input type="tel" name="phone" className="form-control" placeholder="Numéro de téléphone" value={formData.phone} onChange={handleChange} required />
+              <label className="form-label">
+                <FaPhone /> Numéro de téléphone
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                className="form-control"
+                placeholder="Numéro de téléphone"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div className="col-12">
-              <label className="form-label"><FaMapMarkerAlt /> Adresse de livraison</label>
-              <textarea name="address" className="form-control" placeholder="Adresse de livraison" value={formData.address} onChange={handleChange} required />
+              <label className="form-label">
+                <FaMapMarkerAlt /> Adresse de livraison
+              </label>
+              <textarea
+                name="address"
+                className="form-control"
+                placeholder="Adresse de livraison"
+                value={formData.address}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div className="col-md-6">
-              <label className="form-label"><FaMoneyBillWave /> Méthode de paiement</label>
-              <select name="paymentMethod" className="form-select" value={formData.paymentMethod} onChange={handleChange}>
+              <label className="form-label">
+                <FaMoneyBillWave /> Méthode de paiement
+              </label>
+              <select
+                name="paymentMethod"
+                className="form-select"
+                value={formData.paymentMethod}
+                onChange={handleChange}
+              >
                 <option value="orange">Orange Money</option>
                 <option value="wave">Wave</option>
               </select>
             </div>
             <div className="col-12">
-              <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+              <button
+                type="submit"
+                className="btn btn-primary w-100"
+                disabled={loading}
+              >
                 {loading ? "Patientez..." : "Passer la commande"}
               </button>
             </div>
