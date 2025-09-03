@@ -1,0 +1,43 @@
+.faq-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.faq-section-title {
+  font-weight: 700;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #ff6699; /* rose pastel pour accent */
+  padding-bottom: 0.25rem;
+  color: #ff3385; /* couleur section */
+}
+
+.faq-question {
+  background-color: #ffe6f0; /* rose très clair */
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.faq-question:hover {
+  background-color: #ffb3d9; /* rose plus vif au hover */
+}
+
+.faq-answer {
+  padding: 0.5rem 1rem;
+  margin: 0 0 0.5rem 0;
+  border-left: 3px solid #ff3385; /* accent couleur principale */
+  border-radius: 0 8px 8px 0;
+  background-color: #fff0f6; /* rose très pâle */
+  transition: all 0.3s ease;
+}
+
+.faq-answer p {
+  margin: 0;
+  color: #333;
+  line-height: 1.5;
+}

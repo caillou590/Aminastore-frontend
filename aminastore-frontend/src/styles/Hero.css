@@ -1,28 +1,81 @@
-/* src/styles/Hero.css */
+/* ======================
+   Hero Section
+====================== */
 .hero {
   background: url("../assets/fond.jpg") center center/cover no-repeat;
   min-height: 100vh; /* occupe tout l'écran */
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
 }
 
-/* Overlay sombre pour lisibilité du texte */
+/* Overlay coloré doux pour le texte */
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5); /* ajuste l’opacité */
+  background: rgba(255, 102, 153, 0.4); /* rose pastel semi-transparent */
+  backdrop-filter: blur(2px);
 }
 
+/* Texte du hero */
 .hero .container {
   position: relative;
-  z-index: 2; /* pour que le texte soit au-dessus de l’overlay */
+  z-index: 2;
+  text-align: center;
+  padding: 0 15px;
 }
 
 .hero h1 {
-  font-size: 2.8rem;
-  line-height: 1.3;
+  font-size: 3rem;
+  line-height: 1.2;
+  font-family: 'Playfair Display', serif; /* cohérence avec le logo */
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 1px 1px 8px rgba(0,0,0,0.4);
 }
 
 .hero p {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  color: #fff;
+  margin-top: 15px;
+  text-shadow: 1px 1px 6px rgba(0,0,0,0.3);
+}
+
+/* Bouton CTA */
+.hero .btn-cta {
+  margin-top: 25px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 30px;
+  border: none;
+  background: #ff6699; /* rose pastel */
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hero .btn-cta:hover {
+  background: #ff85b3;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.2rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .hero .btn-cta {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
 }

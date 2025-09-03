@@ -1,20 +1,57 @@
-/* src/styles/NavBar.css */
+/* ======================
+   Police et Global
+====================== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Playfair+Display:wght@700&display=swap');
 
-/* Couleur personnalisée du nom de la boutique */
-.brand-name {
-  font-weight: bold;
-  font-size: 1.3rem;
-  color: black; /* 🔥 tu peux changer la couleur ici */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
 }
 
-.navbar-nav .nav-link {
+/* ======================
+   Brand / Logo
+====================== */
+.brand-name {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: #ff6699; /* rose pastel */
   transition: color 0.3s ease;
 }
 
+/* ======================
+   Navbar Links
+====================== */
+.navbar-nav .nav-link {
+  position: relative;
+  transition: color 0.3s ease;
+  font-weight: 500;
+  color: #333;
+}
+
 .navbar-nav .nav-link:hover {
-  color: black; /* la même couleur que le nom boutique */
+  color: #ff6699; /* même rose que le logo */
 }
-/* Pastille du panier */
+
+.navbar-nav .nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -3px;
+  left: 0;
+  background-color: #ff6699;
+  transition: width 0.3s;
+}
+
+.navbar-nav .nav-link:hover::after {
+  width: 100%;
+}
+
+/* ======================
+   Panier / Badge
+====================== */
 .navbar-nav .nav-item.position-relative .badge {
   font-size: 0.7rem;
   width: 18px;
@@ -26,19 +63,39 @@
   top: 0;
   right: -8px;
   transform: translate(50%, -50%);
-  border: 2px solid white;
+  border: 2px solid #fff;
+  background-color: #ff6699; /* rose pastel */
+  color: white;
+  font-weight: bold;
+  border-radius: 50%;
 }
-/* Pastille du panier */
-.navbar-nav .nav-item.position-relative .badge {
-  font-size: 0.7rem;
-  width: 18px;
-  height: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  top: 0;
-  right: -8px;
-  transform: translate(50%, -50%);
-  border: 2px solid white;
+
+/* ======================
+   Navbar / background & responsiveness
+====================== */
+.navbar {
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.navbar-toggler {
+  border: none;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,102,153, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/ %3E%3C/svg%3E");
+}
+
+/* ======================
+   Responsive tweaks
+====================== */
+@media (max-width: 768px) {
+  .navbar-nav {
+    text-align: center;
+  }
+
+  .navbar-nav .nav-link {
+    padding: 10px 0;
+    display: block;
+  }
 }

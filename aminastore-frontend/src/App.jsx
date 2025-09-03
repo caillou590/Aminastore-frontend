@@ -8,6 +8,7 @@ import ProductList from "./pages/ProductList.jsx";
 import ProductDetail from "./pages/ProductDetail.jsx";
 import Cart from "./pages/Cart.jsx";
 import Checkout from "./pages/Checkout.jsx";
+import FAQPage from "./pages/FAQPage.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 // Layout
@@ -36,6 +37,7 @@ function App() {
         <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
         <Route path="/boutique" element={<PublicLayout><ProductList /></PublicLayout>} />
         <Route path="/produit/:id" element={<PublicLayout><ProductDetail /></PublicLayout>} />
+        <Route path="/faq" element={<PublicLayout><FAQPage /></PublicLayout>} />
 
         {/* PANIER & CHECKOUT */}
         <Route path="/panier" element={<PublicLayout><Cart /></PublicLayout>} />
