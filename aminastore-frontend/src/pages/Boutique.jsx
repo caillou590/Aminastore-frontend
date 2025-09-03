@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCard.jsx";
 
@@ -13,6 +13,9 @@ const Boutique = () => {
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
+  const searchTimeout = useRef(null);
+
+  // 🔹 Fetch produits
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -30,6 +33,7 @@ const Boutique = () => {
     }
   };
 
+  // 🔹 Fetch catégories
   const fetchCategories = async () => {
     try {
       const res = await axios.get(`${API_URL}/api/products/categories`);
@@ -41,7 +45,16 @@ const Boutique = () => {
   };
 
   useEffect(() => { fetchCategories(); }, [API_URL]);
-  useEffect(() => { fetchProducts(); }, [search, categorie, page]);
+
+  // 🔹 Debounce recherche
+  useEffect(() => {
+    if (searchTimeout.current) clearTimeout(searchTimeout.current);
+    searchTimeout.current = setTimeout(() => {
+      setPage(1); // reset page à 1 lors d'une nouvelle recherche
+      fetchProducts();
+    }, 500); // délai de 500ms après la dernière frappe
+    return () => clearTimeout(searchTimeout.current);
+  }, [search, categorie, page]);
 
   return (
     <div className="container my-5">
