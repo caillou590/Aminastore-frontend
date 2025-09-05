@@ -1,4 +1,3 @@
-// src/components/NavBar.jsx
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../assets/logo.png";
@@ -6,7 +5,7 @@ import "../styles/NavBar.css";
 
 const NavBar = () => {
   return (
-    <nav className="navbar navbar-expand-lg bg-white border-bottom sticky-top shadow-sm">
+    <nav className="navbar navbar-expand-lg custom-navbar sticky-top">
       <div className="container">
         {/* Logo */}
         <Link className="navbar-brand d-flex align-items-center" to="/">

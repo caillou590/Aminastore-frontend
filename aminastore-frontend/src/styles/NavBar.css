@@ -1,89 +1,35 @@
 /* ======================
-   Police et Global
+   Navbar custom
 ====================== */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Playfair+Display:wght@700&display=swap');
 
-body, html {
-  margin: 0;
-  padding: 0;
-  font-family: 'Poppins', sans-serif;
-}
-
-/* ======================
-   Brand / Logo
-====================== */
-.brand-name {
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  font-size: 1.4rem;
-  color: #ff6699; /* rose pastel */
-  transition: color 0.3s ease;
-}
-
-/* ======================
-   Navbar Links
-====================== */
-.navbar-nav .nav-link {
-  position: relative;
-  transition: color 0.3s ease;
-  font-weight: 500;
-  color: #333;
-}
-
-.navbar-nav .nav-link:hover {
-  color: #ff6699; /* même rose que le logo */
-}
-
-.navbar-nav .nav-link::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: -3px;
-  left: 0;
-  background-color: #ff6699;
-  transition: width 0.3s;
-}
-
-.navbar-nav .nav-link:hover::after {
-  width: 100%;
-}
-
-/* ======================
-   Panier / Badge
-====================== */
-.navbar-nav .nav-item.position-relative .badge {
-  font-size: 0.7rem;
-  width: 18px;
-  height: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  top: 0;
-  right: -8px;
-  transform: translate(50%, -50%);
-  border: 2px solid #fff;
-  background-color: #ff6699; /* rose pastel */
-  color: white;
-  font-weight: bold;
-  border-radius: 50%;
-}
-
-/* ======================
-   Navbar / background & responsiveness
-====================== */
-.navbar {
-  background-color: #fff;
+.custom-navbar {
+  background-color: #374151 !important; /* gris foncé */
+  border-bottom: 1px solid #D1D5DB;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.navbar-toggler {
+.custom-navbar .navbar-brand,
+.custom-navbar .nav-link {
+  color: #ffffff !important; /* texte blanc */
+}
+
+.custom-navbar .nav-link:hover {
+  color: #D1D5DB !important; /* gris clair au hover */
+}
+
+.custom-navbar .brand-name {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  transition: color 0.3s ease;
+}
+
+.custom-navbar .navbar-toggler {
   border: none;
 }
 
-.navbar-toggler-icon {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,102,153, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/ %3E%3C/svg%3E");
+.custom-navbar .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255,0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/ %3E%3C/svg%3E");
 }
 
 /* ======================

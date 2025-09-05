@@ -5,46 +5,62 @@
 html, body, #root {
   height: 100%;
   margin: 0;
-  background-color: #fff5f8;
+  background-color: #9CA3AF; /* ✅ Couleur de fond modifiée */
   font-family: 'Poppins', sans-serif;
   color: #333333;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Playfair Display', serif;
-  color: #4b3f72;
+  color: #374151; /* ✅ Gris foncé pour contraste */
 }
 
 a {
   text-decoration: none;
-  color: #ff6f91;
+  color: #ffffff; /* ✅ Texte blanc */
 }
 
 a:hover {
-  color: #ff477e;
+  color: #D1D5DB; /* ✅ Gris clair au hover */
 }
 
 /* -------------------- */
 /* Navbar */
-.navbar {
-  background-color: #ffffff;
-  border-bottom: 1px solid #ffd6e0;
-}
 
+/* ✅ Option 1 : Contraste (recommandé) */
+.navbar {
+  background-color: #374151; /* ✅ Gris foncé */
+  border-bottom: 1px solid #D1D5DB;
+}
 .navbar .nav-link {
-  color: #4b3f72;
+  color: #ffffff;
   font-weight: 500;
   transition: 0.3s;
 }
-
 .navbar .nav-link:hover {
-  color: #ff6f91;
+  color: #D1D5DB;
 }
+
+/* 🔄 Option 2 : Uniforme (désactive l’Option 1 et active celle-ci si tu veux tester) */
+/*
+.navbar {
+  background-color: #9CA3AF; 
+  border-bottom: 1px solid #D1D5DB;
+}
+.navbar .nav-link {
+  color: #111827; 
+  font-weight: 500;
+  transition: 0.3s;
+}
+.navbar .nav-link:hover {
+  color: #374151;
+}
+*/
 
 /* -------------------- */
 /* Footer */
 footer {
-  background-color: #4b3f72;
+  background-color: #374151; /* ✅ Même couleur que la navbar pour cohérence */
   color: #fff;
   padding: 30px 0;
   text-align: center;
@@ -54,7 +70,7 @@ footer {
 /* -------------------- */
 /* Buttons */
 button, .btn {
-  background-color: #ff6f91;
+  background-color: #374151; /* ✅ Boutons gris foncé */
   color: #fff;
   border-radius: 8px;
   border: none;
@@ -64,7 +80,7 @@ button, .btn {
 }
 
 button:hover, .btn:hover {
-  background-color: #ff477e;
+  background-color: #111827; /* ✅ Noir foncé au hover */
 }
 
 /* -------------------- */
@@ -73,14 +89,14 @@ button:hover, .btn:hover {
   background: #ffffff;
   border-radius: 12px;
   padding: 15px;
-  box-shadow: 0 4px 12px rgba(255, 111, 145, 0.15);
+  box-shadow: 0 4px 12px rgba(55, 65, 81, 0.15);
   transition: all 0.3s ease;
   margin-bottom: 20px;
 }
 
 .product-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 18px rgba(255, 111, 145, 0.2);
+  box-shadow: 0 6px 18px rgba(55, 65, 81, 0.2);
 }
 
 .product-card img,
@@ -102,11 +118,11 @@ button:hover, .btn:hover {
 .actions .edit {
   flex: 1;
   padding: 8px;
-  background-color: #4b3f72;
+  background-color: #374151;
 }
 
 .actions .edit:hover {
-  background-color: #362c55;
+  background-color: #111827;
 }
 
 .actions .delete {
@@ -125,19 +141,19 @@ button:hover, .btn:hover {
   background: #ffffff;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(255, 111, 145, 0.1);
+  box-shadow: 0 4px 12px rgba(55, 65, 81, 0.1);
 }
 
 .card h4 {
   margin-bottom: 15px;
-  color: #4b3f72;
+  color: #374151;
 }
 
 .card input,
 .card textarea,
 .card select {
   padding: 10px;
-  border: 1px solid #ffd6e0;
+  border: 1px solid #D1D5DB;
   border-radius: 8px;
   font-size: 1rem;
   width: 100%;
@@ -164,12 +180,12 @@ button:hover, .btn:hover {
 }
 
 .checkout-container .btn-primary {
-  background-color: #ff6f91;
+  background-color: #374151;
   border: none;
 }
 
 .checkout-container .btn-primary:hover {
-  background-color: #ff477e;
+  background-color: #111827;
 }
 
 /* -------------------- */
@@ -181,13 +197,13 @@ button:hover, .btn:hover {
 
 .faq-section-title {
   font-family: 'Playfair Display', serif;
-  color: #4b3f72;
+  color: #374151;
   margin-bottom: 15px;
 }
 
 .faq-question {
   font-weight: 500;
-  color: #ff6f91;
+  color: #374151;
   cursor: pointer;
 }
 
