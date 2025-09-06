@@ -1,12 +1,13 @@
 /* ======================
-   Navbar Custom Aminastore (Aqua vif)
+   Navbar Custom Aminastore
 ====================== */
 .custom-navbar {
   background-color: #06b6d4 !important; /* aqua vif */
   border-bottom: 2px solid #22d3ee; /* accent aqua clair */
   box-shadow: 0 3px 10px rgba(0,0,0,0.1);
   transition: background-color 0.3s ease;
-  z-index: 1030;
+  position: relative;
+  z-index: 1000;
 }
 
 .custom-navbar .navbar-brand,
@@ -18,7 +19,7 @@
 
 .custom-navbar .nav-link:hover,
 .custom-navbar .nav-link.active {
-  color: #ffffff !important; /* texte toujours blanc au hover */
+  color: #ffffff !important;
   text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
@@ -26,32 +27,41 @@
   font-family: 'Playfair Display', serif;
   font-weight: 700;
   font-size: 1.5rem;
-  color: #ffffff !important; /* nom de la marque en blanc */
+  color: #ffffff !important;
   transition: color 0.5s ease, transform 0.3s ease;
 }
 
 .custom-navbar .brand-name:hover {
-  transform: scale(1.05); /* léger zoom au hover */
+  transform: scale(1.05);
 }
 
-/* ======================
-   Toggle button (burger)
-====================== */
+/* --------------------
+   Toggle Button / Burger
+-------------------- */
 .custom-navbar .navbar-toggler {
   border: none;
-  z-index: 1050; /* toujours au-dessus */
+  z-index: 2000; /* toujours au-dessus */
+  display: block;
 }
 
 .custom-navbar .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0,0,0,0.85)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/ %3E%3C/svg%3E");
-  width: 30px;
-  height: 30px;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 
-/* ======================
-   Responsive tweaks
-====================== */
+/* --------------------
+   Responsive Mobile Menu
+-------------------- */
 @media (max-width: 768px) {
+  .navbar-collapse {
+    background-color: rgba(6, 182, 212, 0.95); /* semi-transparent */
+    position: absolute;
+    top: 100%; /* juste sous la navbar */
+    left: 0;
+    width: 100%;
+    z-index: 1500; /* sous le burger */
+    padding: 1rem 0;
+  }
+
   .navbar-nav {
     text-align: center;
   }
@@ -60,25 +70,19 @@
     padding: 12px 0;
     display: block;
   }
-
-  /* Fond semi-transparent pour le menu mobile ouvert */
-  #mainnav.collapse.show {
-    background-color: rgba(6, 182, 212, 0.95); /* aqua clair semi-transparent */
-    padding: 10px 0;
-  }
 }
 
-/* ======================
-   Active link mobile
-====================== */
+/* --------------------
+   Active Link Mobile
+-------------------- */
 .navbar-nav .nav-link.active {
   font-weight: 600;
   border-bottom: 2px solid #22d3ee; /* accent aqua clair */
 }
 
-/* ======================
+/* --------------------
    Brand spacing
-====================== */
+-------------------- */
 .custom-navbar .brand-name {
   margin-right: 1rem;
 }
