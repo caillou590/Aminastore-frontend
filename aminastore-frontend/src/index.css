@@ -7,7 +7,7 @@ html, body, #root {
   margin: 0;
   background-color: #f3f4f6; /* fond gris clair */
   font-family: 'Poppins', sans-serif;
-  color: #1f2937; /* gris foncé pour texte principal */
+  color: #1f2937; /* texte principal gris foncé */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -26,20 +26,20 @@ a {
 }
 
 a:hover {
-  color: #22d3ee; /* accent aqua plus clair */
+  color: #22d3ee; /* aqua clair au hover */
 }
 
 /* -------------------- */
 /* Navbar Modernisée */
 .navbar {
-  background: linear-gradient(90deg, #1f2937, #111827); /* dégradé gris foncé → noir */
-  border-bottom: 2px solid #06b6d4; /* accent aqua */
+  background: linear-gradient(90deg, #1f2937, #111827);
+  border-bottom: 2px solid #06b6d4;
   box-shadow: 0 3px 10px rgba(0,0,0,0.2);
   padding: 0.8rem 1rem;
 }
 
 .navbar .nav-link {
-  color: #f3f4f6; /* gris clair */
+  color: #f3f4f6;
   font-weight: 500;
   transition: color 0.3s ease, transform 0.3s ease;
 }
@@ -47,7 +47,7 @@ a:hover {
 .navbar .nav-link:hover,
 .navbar .nav-link.active {
   color: #06b6d4;
-  transform: scale(1.05); /* petit zoom au hover */
+  transform: scale(1.05);
 }
 
 /* -------------------- */
@@ -64,7 +64,7 @@ footer {
 /* -------------------- */
 /* Buttons */
 button, .btn {
-  background-color: #06b6d4; /* aqua */
+  background-color: #06b6d4;
   color: #fff;
   border-radius: 8px;
   border: none;
@@ -79,7 +79,7 @@ button:hover, .btn:hover {
 
 /* Boutons secondaires */
 .btn-secondary {
-  background-color: #6b7280; /* gris secondaire */
+  background-color: #6b7280;
   color: #fff;
 }
 
@@ -127,7 +127,7 @@ button:hover, .btn:hover {
 .actions .delete {
   flex: 1;
   padding: 8px;
-  background-color: #ef4444; /* rouge pour supprimer */
+  background-color: #ef4444;
   color: #fff;
 }
 
@@ -138,7 +138,7 @@ button:hover, .btn:hover {
 /* -------------------- */
 /* Forms & Cards */
 .card {
-  background: #e5e7eb; /* gris clair */
+  background: #e5e7eb;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 4px 12px rgba(31,41,55,0.1);
@@ -195,6 +195,53 @@ button:hover, .btn:hover {
 .alert-success { background-color: #10b981; color: #fff; }
 .alert-warning { background-color: #f59e0b; color: #fff; }
 .alert-error   { background-color: #ef4444; color: #fff; }
+
+/* -------------------- */
+/* Dashboard Admin */
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #1f2937;
+  color: #fff;
+  padding: 1rem;
+  position: relative;
+}
+
+.content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  background-color: #f3f4f6;
+}
+
+/* Sidebar links */
+.sidebar a {
+  display: block;
+  color: #f3f4f6;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 5px;
+}
+
+.sidebar a:hover {
+  background-color: #06b6d4;
+  color: #fff;
+}
+
+/* Responsive sidebar */
+@media (max-width: 768px) {
+  .dashboard {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+}
 
 /* -------------------- */
 /* Responsive Helpers */

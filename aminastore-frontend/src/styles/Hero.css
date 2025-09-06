@@ -1,9 +1,9 @@
 /* ======================
-   Hero Section
+   Hero Section - Overlay Gris Flou
 ====================== */
 .hero {
-  background: url("../assets/fond.jpg") center center/cover no-repeat;
-  min-height: 100vh; /* occupe tout l'écran */
+  background: url("../assets/fond.jpg") center center / cover no-repeat;
+  min-height: 100vh;
   position: relative;
   display: flex;
   align-items: center;
@@ -12,16 +12,17 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Overlay coloré doux pour le texte */
+/* Overlay gris uniforme avec flou */
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(255, 102, 153, 0.4); /* rose pastel semi-transparent */
-  backdrop-filter: blur(2px);
+  background-color: rgba(128, 128, 128, 0.4); /* gris semi-transparent */
+  backdrop-filter: blur(1px); /* floutter */
+  z-index: 1;
 }
 
-/* Texte du hero */
+/* Contenu texte */
 .hero .container {
   position: relative;
   z-index: 2;
@@ -32,7 +33,7 @@
 .hero h1 {
   font-size: 3rem;
   line-height: 1.2;
-  font-family: 'Playfair Display', serif; /* cohérence avec le logo */
+  font-family: 'Playfair Display', serif;
   font-weight: 700;
   color: #fff;
   text-shadow: 1px 1px 8px rgba(0,0,0,0.4);
@@ -53,29 +54,20 @@
   font-weight: 500;
   border-radius: 30px;
   border: none;
-  background: #ff6699; /* rose pastel */
+  background: #06b6d4; /* accent aqua */
   color: #fff;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .hero .btn-cta:hover {
-  background: #ff85b3;
+  background: #22d3ee;
   transform: translateY(-2px);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .hero h1 {
-    font-size: 2.2rem;
-  }
-
-  .hero p {
-    font-size: 1rem;
-  }
-
-  .hero .btn-cta {
-    padding: 10px 20px;
-    font-size: 0.95rem;
-  }
+  .hero h1 { font-size: 2.2rem; }
+  .hero p { font-size: 1rem; }
+  .hero .btn-cta { padding: 10px 20px; font-size: 0.95rem; }
 }
