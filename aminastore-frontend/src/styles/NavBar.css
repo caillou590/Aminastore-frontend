@@ -1,27 +1,36 @@
 /* ======================
-   Navbar custom
+   Navbar Custom Aminastore (Aqua vif)
 ====================== */
-
 .custom-navbar {
-  background-color: #374151 !important; /* gris foncé */
-  border-bottom: 1px solid #D1D5DB;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background-color: #06b6d4 !important; /* aqua vif */
+  border-bottom: 2px solid #22d3ee; /* accent aqua clair */
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease;
 }
 
 .custom-navbar .navbar-brand,
 .custom-navbar .nav-link {
   color: #ffffff !important; /* texte blanc */
+  font-weight: 500;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
-.custom-navbar .nav-link:hover {
-  color: #D1D5DB !important; /* gris clair au hover */
+.custom-navbar .nav-link:hover,
+.custom-navbar .nav-link.active {
+  color: #ffffff !important; /* texte toujours blanc au hover */
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
 .custom-navbar .brand-name {
   font-family: 'Playfair Display', serif;
   font-weight: 700;
-  font-size: 1.4rem;
-  transition: color 0.3s ease;
+  font-size: 1.5rem;
+  color: #ffffff !important; /* nom de la marque en blanc */
+  transition: color 0.5s ease, transform 0.3s ease;
+}
+
+.custom-navbar .brand-name:hover {
+  transform: scale(1.05); /* léger zoom au hover */
 }
 
 .custom-navbar .navbar-toggler {
@@ -29,7 +38,7 @@
 }
 
 .custom-navbar .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255,0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/ %3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255,0.9)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/ %3E%3C/svg%3E");
 }
 
 /* ======================
@@ -41,7 +50,28 @@
   }
 
   .navbar-nav .nav-link {
-    padding: 10px 0;
+    padding: 12px 0;
     display: block;
   }
+
+  /* Fond semi-transparent pour le menu mobile ouvert */
+  .custom-navbar.collapsing,
+  .custom-navbar.show {
+    background-color: rgba(6, 182, 212, 0.95);
+  }
+}
+
+/* ======================
+   Active link mobile
+====================== */
+.navbar-nav .nav-link.active {
+  font-weight: 600;
+  border-bottom: 2px solid #22d3ee; /* accent aqua clair */
+}
+
+/* ======================
+   Brand spacing
+====================== */
+.custom-navbar .brand-name {
+  margin-right: 1rem;
 }

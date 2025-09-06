@@ -5,82 +5,86 @@
 html, body, #root {
   height: 100%;
   margin: 0;
-  background-color: #9CA3AF; /* ✅ Couleur de fond modifiée */
+  background-color: #f3f4f6; /* fond gris clair */
   font-family: 'Poppins', sans-serif;
-  color: #333333;
+  color: #1f2937; /* gris foncé pour texte principal */
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Playfair Display', serif;
-  color: #374151; /* ✅ Gris foncé pour contraste */
+  color: #1f2937;
+}
+
+p, span, li {
+  color: #4b5563; /* gris secondaire */
 }
 
 a {
   text-decoration: none;
-  color: #ffffff; /* ✅ Texte blanc */
+  color: #06b6d4; /* aqua pour liens */
+  transition: 0.3s;
 }
 
 a:hover {
-  color: #D1D5DB; /* ✅ Gris clair au hover */
+  color: #22d3ee; /* accent aqua plus clair */
 }
 
 /* -------------------- */
-/* Navbar */
-
-/* ✅ Option 1 : Contraste (recommandé) */
+/* Navbar Modernisée */
 .navbar {
-  background-color: #374151; /* ✅ Gris foncé */
-  border-bottom: 1px solid #D1D5DB;
-}
-.navbar .nav-link {
-  color: #ffffff;
-  font-weight: 500;
-  transition: 0.3s;
-}
-.navbar .nav-link:hover {
-  color: #D1D5DB;
+  background: linear-gradient(90deg, #1f2937, #111827); /* dégradé gris foncé → noir */
+  border-bottom: 2px solid #06b6d4; /* accent aqua */
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  padding: 0.8rem 1rem;
 }
 
-/* 🔄 Option 2 : Uniforme (désactive l’Option 1 et active celle-ci si tu veux tester) */
-/*
-.navbar {
-  background-color: #9CA3AF; 
-  border-bottom: 1px solid #D1D5DB;
-}
 .navbar .nav-link {
-  color: #111827; 
+  color: #f3f4f6; /* gris clair */
   font-weight: 500;
-  transition: 0.3s;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
-.navbar .nav-link:hover {
-  color: #374151;
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+  color: #06b6d4;
+  transform: scale(1.05); /* petit zoom au hover */
 }
-*/
 
 /* -------------------- */
 /* Footer */
 footer {
-  background-color: #374151; /* ✅ Même couleur que la navbar pour cohérence */
+  background-color: #1f2937;
   color: #fff;
   padding: 30px 0;
   text-align: center;
   font-size: 0.9rem;
+  border-top: 2px solid #06b6d4;
 }
 
 /* -------------------- */
 /* Buttons */
 button, .btn {
-  background-color: #374151; /* ✅ Boutons gris foncé */
+  background-color: #06b6d4; /* aqua */
   color: #fff;
   border-radius: 8px;
   border: none;
-  transition: 0.3s;
   padding: 10px 15px;
   font-weight: 500;
+  transition: 0.3s;
 }
 
 button:hover, .btn:hover {
-  background-color: #111827; /* ✅ Noir foncé au hover */
+  background-color: #22d3ee;
+}
+
+/* Boutons secondaires */
+.btn-secondary {
+  background-color: #6b7280; /* gris secondaire */
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background-color: #4b5563;
 }
 
 /* -------------------- */
@@ -89,14 +93,14 @@ button:hover, .btn:hover {
   background: #ffffff;
   border-radius: 12px;
   padding: 15px;
-  box-shadow: 0 4px 12px rgba(55, 65, 81, 0.15);
+  box-shadow: 0 4px 12px rgba(31,41,55,0.1);
   transition: all 0.3s ease;
   margin-bottom: 20px;
 }
 
 .product-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 18px rgba(55, 65, 81, 0.2);
+  box-shadow: 0 6px 18px rgba(31,41,55,0.15);
 }
 
 .product-card img,
@@ -109,16 +113,11 @@ button:hover, .btn:hover {
 }
 
 /* Actions (Edit/Delete) */
-.actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
 .actions .edit {
   flex: 1;
   padding: 8px;
-  background-color: #374151;
+  background-color: #1f2937;
+  color: #fff;
 }
 
 .actions .edit:hover {
@@ -128,7 +127,8 @@ button:hover, .btn:hover {
 .actions .delete {
   flex: 1;
   padding: 8px;
-  background-color: #e63946;
+  background-color: #ef4444; /* rouge pour supprimer */
+  color: #fff;
 }
 
 .actions .delete:hover {
@@ -138,80 +138,63 @@ button:hover, .btn:hover {
 /* -------------------- */
 /* Forms & Cards */
 .card {
-  background: #ffffff;
+  background: #e5e7eb; /* gris clair */
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(55, 65, 81, 0.1);
+  box-shadow: 0 4px 12px rgba(31,41,55,0.1);
 }
 
 .card h4 {
   margin-bottom: 15px;
-  color: #374151;
+  color: #1f2937;
 }
 
 .card input,
 .card textarea,
 .card select {
   padding: 10px;
-  border: 1px solid #D1D5DB;
+  border: 1px solid #d1d5db;
   border-radius: 8px;
   font-size: 1rem;
   width: 100%;
 }
 
-.card input[type="file"] {
-  margin-top: 5px;
-  margin-bottom: 10px;
+.card button {
+  background-color: #06b6d4;
+  color: #fff;
 }
 
-.card button {
-  cursor: pointer;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 1rem;
-  font-weight: 500;
+.card button:hover {
+  background-color: #22d3ee;
 }
 
 /* -------------------- */
 /* Checkout */
-.checkout-container {
-  max-width: 800px;
-  margin: auto;
-}
-
 .checkout-container .btn-primary {
-  background-color: #374151;
+  background-color: #06b6d4;
   border: none;
 }
 
 .checkout-container .btn-primary:hover {
-  background-color: #111827;
+  background-color: #22d3ee;
 }
 
 /* -------------------- */
 /* FAQ */
-.faq-container {
-  max-width: 900px;
-  margin: auto;
-}
-
-.faq-section-title {
-  font-family: 'Playfair Display', serif;
-  color: #374151;
-  margin-bottom: 15px;
-}
-
 .faq-question {
   font-weight: 500;
-  color: #374151;
-  cursor: pointer;
+  color: #1f2937;
 }
 
 .faq-answer {
-  padding-left: 15px;
-  margin-top: 5px;
-  color: #333;
+  color: #4b5563;
 }
+
+/* -------------------- */
+/* Alerts / Notifications */
+.alert-success { background-color: #10b981; color: #fff; }
+.alert-warning { background-color: #f59e0b; color: #fff; }
+.alert-error   { background-color: #ef4444; color: #fff; }
 
 /* -------------------- */
 /* Responsive Helpers */
