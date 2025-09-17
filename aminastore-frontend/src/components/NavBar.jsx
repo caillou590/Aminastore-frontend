@@ -1,6 +1,8 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/logo.png";
+import { AiOutlineHome, AiOutlineShoppingCart, AiOutlineQuestionCircle } from "react-icons/ai";
+import { BiStore } from "react-icons/bi";
 import "../styles/NavBar.css";
 
 const NavBar = () => {
@@ -10,10 +12,10 @@ const NavBar = () => {
         {/* Groupe gauche */}
         <div className="nav-left">
           <NavLink to="/" className="nav-link">
-            🏠 Accueil
+            <AiOutlineHome /> Accueil
           </NavLink>
           <NavLink to="/boutique" className="nav-link">
-            🛍️ Boutique
+            <BiStore /> Boutique
           </NavLink>
         </div>
 
@@ -26,10 +28,10 @@ const NavBar = () => {
         {/* Groupe droit */}
         <div className="nav-right">
           <NavLink to="/panier" className="nav-link">
-            🛒 Panier
+            <AiOutlineShoppingCart /> Panier
           </NavLink>
           <NavLink to="/faq" className="nav-link">
-            ❓ FAQ
+            <AiOutlineQuestionCircle /> FAQ
           </NavLink>
         </div>
       </div>
