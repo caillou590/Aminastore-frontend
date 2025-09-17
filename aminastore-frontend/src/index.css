@@ -1,70 +1,117 @@
-/* -------------------- */
-/* Fonts & Global */
+/* ===========================
+   Fonts & Global
+=========================== */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@400;500;600&display=swap');
 
 html, body, #root {
   height: 100%;
   margin: 0;
-  background-color: #f3f4f6; /* fond gris clair */
+  background-color: #fffdf7; /* blanc cassé/beige très clair */
   font-family: 'Poppins', sans-serif;
-  color: #1f2937; /* texte principal gris foncé */
+  color: #3e3e3e;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Playfair Display', serif;
-  color: #1f2937;
+  color: #2c2c2c;
 }
 
 p, span, li {
-  color: #4b5563; /* gris secondaire */
+  color: #5a5a5a;
 }
 
 a {
   text-decoration: none;
-  color: #06b6d4; /* aqua pour liens */
+  color: #c19a6b; /* beige caramel */
   transition: 0.3s;
 }
 
 a:hover {
-  color: #22d3ee; /* aqua clair au hover */
+  color: #a77d55; /* beige foncé */
 }
 
-/* -------------------- */
-/* Navbar Modernisée */
+/* ===========================
+   Navbar
+=========================== */
 .navbar {
-  background: linear-gradient(90deg, #1f2937, #111827);
-  border-bottom: 2px solid #06b6d4;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-  padding: 0.8rem 1rem;
+  background: #fff;
+  border-bottom: 2px solid #e5decf; /* beige clair */
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  padding: 0.6rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.navbar .navbar-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.navbar .navbar-brand img {
+  height: 45px;
+  transition: transform 0.3s ease;
+}
+
+.navbar .navbar-brand img:hover {
+  transform: scale(1.05);
+}
+
+.navbar .brand-name {
+  font-weight: 700;
+  color: #3e3e3e;
+  margin-top: 3px;
+  font-size: 1rem;
+}
+
+/* Liens / Icônes */
+.navbar .nav-links-left,
+.navbar .nav-links-right {
+  display: flex;
+  gap: 1rem;
+  flex: 1 1 auto;
+  justify-content: center;
 }
 
 .navbar .nav-link {
-  color: #f3f4f6;
+  color: #3e3e3e;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
   transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .navbar .nav-link:hover,
 .navbar .nav-link.active {
-  color: #06b6d4;
-  transform: scale(1.05);
+  color: #c19a6b;
+  transform: translateY(-2px);
 }
 
-/* -------------------- */
-/* Footer */
+.navbar .nav-link svg {
+  font-size: 20px;
+}
+
+/* ===========================
+   Footer
+=========================== */
 footer {
-  background-color: #1f2937;
-  color: #fff;
+  background-color: #f9f6f1; /* beige clair */
+  color: #3e3e3e;
   padding: 30px 0;
   text-align: center;
   font-size: 0.9rem;
-  border-top: 2px solid #06b6d4;
+  border-top: 2px solid #e5decf;
 }
 
-/* -------------------- */
-/* Buttons */
+/* ===========================
+   Buttons
+=========================== */
 button, .btn {
-  background-color: #06b6d4;
+  background-color: #c19a6b; 
   color: #fff;
   border-radius: 8px;
   border: none;
@@ -74,33 +121,33 @@ button, .btn {
 }
 
 button:hover, .btn:hover {
-  background-color: #22d3ee;
+  background-color: #a77d55;
 }
 
-/* Boutons secondaires */
 .btn-secondary {
-  background-color: #6b7280;
-  color: #fff;
+  background-color: #e5decf;
+  color: #3e3e3e;
 }
 
 .btn-secondary:hover {
-  background-color: #4b5563;
+  background-color: #d1c7b8;
 }
 
-/* -------------------- */
-/* Product Card */
+/* ===========================
+   Product Card
+=========================== */
 .product-card {
-  background: #ffffff;
+  background: #fff;
   border-radius: 12px;
   padding: 15px;
-  box-shadow: 0 4px 12px rgba(31,41,55,0.1);
+  box-shadow: 0 4px 12px rgba(31,41,55,0.08);
   transition: all 0.3s ease;
   margin-bottom: 20px;
 }
 
 .product-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 18px rgba(31,41,55,0.15);
+  box-shadow: 0 6px 18px rgba(31,41,55,0.12);
 }
 
 .product-card img,
@@ -116,12 +163,12 @@ button:hover, .btn:hover {
 .actions .edit {
   flex: 1;
   padding: 8px;
-  background-color: #1f2937;
+  background-color: #c19a6b;
   color: #fff;
 }
 
 .actions .edit:hover {
-  background-color: #111827;
+  background-color: #a77d55;
 }
 
 .actions .delete {
@@ -135,69 +182,75 @@ button:hover, .btn:hover {
   background-color: #c62828;
 }
 
-/* -------------------- */
-/* Forms & Cards */
+/* ===========================
+   Forms & Cards
+=========================== */
 .card {
-  background: #e5e7eb;
+  background: #f9f6f1; 
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(31,41,55,0.1);
+  box-shadow: 0 4px 12px rgba(31,41,55,0.08);
 }
 
 .card h4 {
   margin-bottom: 15px;
-  color: #1f2937;
+  color: #2c2c2c;
 }
 
 .card input,
 .card textarea,
 .card select {
   padding: 10px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #d1c7b8;
   border-radius: 8px;
   font-size: 1rem;
   width: 100%;
+  background: #fff;
 }
 
 .card button {
-  background-color: #06b6d4;
+  background-color: #c19a6b;
   color: #fff;
 }
 
 .card button:hover {
-  background-color: #22d3ee;
+  background-color: #a77d55;
 }
 
-/* -------------------- */
-/* Checkout */
+/* ===========================
+   Checkout
+=========================== */
 .checkout-container .btn-primary {
-  background-color: #06b6d4;
+  background-color: #c19a6b;
   border: none;
 }
 
 .checkout-container .btn-primary:hover {
-  background-color: #22d3ee;
+  background-color: #a77d55;
 }
 
-/* -------------------- */
-/* FAQ */
+/* ===========================
+   FAQ
+=========================== */
 .faq-question {
   font-weight: 500;
-  color: #1f2937;
+  color: #2c2c2c;
 }
 
 .faq-answer {
-  color: #4b5563;
+  color: #5a5a5a;
 }
 
-/* -------------------- */
-/* Alerts / Notifications */
+/* ===========================
+   Alerts / Notifications
+=========================== */
 .alert-success { background-color: #10b981; color: #fff; }
 .alert-warning { background-color: #f59e0b; color: #fff; }
 .alert-error   { background-color: #ef4444; color: #fff; }
 
-/* -------------------- */
-/* Dashboard Admin */
+/* ===========================
+   Dashboard Admin
+=========================== */
 .dashboard {
   display: flex;
   min-height: 100vh;
@@ -205,8 +258,8 @@ button:hover, .btn:hover {
 
 .sidebar {
   width: 250px;
-  background-color: #1f2937;
-  color: #fff;
+  background-color: #f9f6f1;
+  color: #3e3e3e;
   padding: 1rem;
   position: relative;
 }
@@ -215,36 +268,38 @@ button:hover, .btn:hover {
   flex: 1;
   padding: 2rem;
   overflow-y: auto;
-  background-color: #f3f4f6;
+  background-color: #fffdf7;
 }
 
-/* Sidebar links */
 .sidebar a {
   display: block;
-  color: #f3f4f6;
+  color: #3e3e3e;
   padding: 10px;
   border-radius: 6px;
   margin-bottom: 5px;
 }
 
 .sidebar a:hover {
-  background-color: #06b6d4;
+  background-color: #c19a6b;
   color: #fff;
 }
 
-/* Responsive sidebar */
-@media (max-width: 768px) {
-  .dashboard {
+/* ===========================
+   Responsive
+=========================== */
+@media (max-width: 992px) {
+  .navbar {
     flex-direction: column;
+    gap: 0.5rem;
   }
 
-  .sidebar {
-    width: 100%;
+  .navbar .nav-links-left,
+  .navbar .nav-links-right {
+    justify-content: center;
+    gap: 0.5rem;
   }
 }
 
-/* -------------------- */
-/* Responsive Helpers */
 @media (max-width: 768px) {
   .product-card img,
   .product-card video {

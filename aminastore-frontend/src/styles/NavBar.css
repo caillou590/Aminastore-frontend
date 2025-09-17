@@ -1,88 +1,99 @@
 /* ======================
-   Navbar Custom Aminastore
+   Navbar Aminastore
 ====================== */
 .custom-navbar {
-  background-color: #06b6d4 !important; /* aqua vif */
-  border-bottom: 2px solid #22d3ee; /* accent aqua clair */
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  transition: background-color 0.3s ease;
-  position: relative;
+  background-color: #ffffff;
+  border-bottom: 2px solid #f5f5dc;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  padding: 0.6rem 1rem;
   z-index: 1000;
 }
 
-.custom-navbar .navbar-brand,
+/* Container flex principal */
+.custom-navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 1rem;
+}
+
+/* Groupes gauche / droite */
+.nav-left, .nav-right {
+  display: flex;
+  gap: 0.8rem;
+  flex: 1 1 auto; /* laisse s'étendre sur mobile */
+  justify-content: flex-start;
+}
+
+.nav-right {
+  justify-content: flex-end;
+}
+
+/* Logo centré */
+.logo-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.logo-center img {
+  height: 45px;
+  transition: transform 0.3s ease;
+}
+
+.logo-center img:hover {
+  transform: scale(1.05);
+}
+
+.logo-center .brand-name {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: #2c2c2c;
+  font-size: 1rem;
+  margin-top: 2px;
+}
+
+/* Liens / icônes */
 .custom-navbar .nav-link {
-  color: #ffffff !important; /* texte blanc */
+  color: #2c2c2c;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
   transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .custom-navbar .nav-link:hover,
 .custom-navbar .nav-link.active {
-  color: #ffffff !important;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  color: #c4a484;
+  transform: translateY(-2px);
 }
 
-.custom-navbar .brand-name {
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: #ffffff !important;
-  transition: color 0.5s ease, transform 0.3s ease;
+.custom-navbar .nav-link svg {
+  font-size: 20px;
 }
 
-.custom-navbar .brand-name:hover {
-  transform: scale(1.05);
-}
-
-/* --------------------
-   Toggle Button / Burger
--------------------- */
-.custom-navbar .navbar-toggler {
-  border: none;
-  z-index: 2000; /* toujours au-dessus */
-  display: block;
-}
-
-.custom-navbar .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-}
-
-/* --------------------
-   Responsive Mobile Menu
--------------------- */
+/* ======================
+   Responsive
+====================== */
 @media (max-width: 768px) {
-  .navbar-collapse {
-    background-color: rgba(6, 182, 212, 0.95); /* semi-transparent */
-    position: absolute;
-    top: 100%; /* juste sous la navbar */
-    left: 0;
-    width: 100%;
-    z-index: 1500; /* sous le burger */
-    padding: 1rem 0;
+  .logo-center img {
+    height: 35px;
   }
 
-  .navbar-nav {
-    text-align: center;
+  .logo-center .brand-name {
+    font-size: 0.9rem;
   }
 
-  .navbar-nav .nav-link {
-    padding: 12px 0;
-    display: block;
+  .nav-left, .nav-right {
+    gap: 0.5rem;
   }
-}
 
-/* --------------------
-   Active Link Mobile
--------------------- */
-.navbar-nav .nav-link.active {
-  font-weight: 600;
-  border-bottom: 2px solid #22d3ee; /* accent aqua clair */
-}
-
-/* --------------------
-   Brand spacing
--------------------- */
-.custom-navbar .brand-name {
-  margin-right: 1rem;
+  /* Force icônes gauche/droite à rester alignées sur la même ligne que le logo */
+  .custom-navbar .container {
+    justify-content: space-between;
+  }
 }

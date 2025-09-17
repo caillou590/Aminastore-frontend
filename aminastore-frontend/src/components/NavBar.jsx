@@ -1,55 +1,36 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import logo from "../assets/logo.png";
 import "../styles/NavBar.css";
 
 const NavBar = () => {
   return (
-    <nav className="navbar navbar-expand-lg custom-navbar sticky-top">
+    <nav className="custom-navbar">
       <div className="container">
-        {/* Logo */}
-        <Link className="navbar-brand d-flex align-items-center" to="/">
-          <img src={logo} alt="Aminastore" style={{ height: 40 }} className="me-2" />
+        {/* Groupe gauche */}
+        <div className="nav-left">
+          <NavLink to="/" className="nav-link">
+            🏠 Accueil
+          </NavLink>
+          <NavLink to="/boutique" className="nav-link">
+            🛍️ Boutique
+          </NavLink>
+        </div>
+
+        {/* Logo centré */}
+        <div className="logo-center">
+          <img src={logo} alt="Aminastore" />
           <span className="brand-name">Aminastore</span>
-        </Link>
+        </div>
 
-        {/* Toggle button pour mobile */}
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#mainnav"
-          aria-controls="mainnav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        {/* Liens de navigation */}
-        <div id="mainnav" className="collapse navbar-collapse">
-          <ul className="navbar-nav ms-auto">
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/">
-                Accueil
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/boutique">
-                Boutique
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/panier">
-                Panier
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/faq">
-                FAQ
-              </NavLink>
-            </li>
-          </ul>
+        {/* Groupe droit */}
+        <div className="nav-right">
+          <NavLink to="/panier" className="nav-link">
+            🛒 Panier
+          </NavLink>
+          <NavLink to="/faq" className="nav-link">
+            ❓ FAQ
+          </NavLink>
         </div>
       </div>
     </nav>
