@@ -164,7 +164,7 @@ const Checkout = () => {
         <div className="order-success text-center">
           <h2>✅ Commande enregistrée !</h2>
           <p>Merci <strong>{formData.name}</strong> pour votre commande.</p>
-          <p>Votre commande : <strong>Commande numéro {orderNumber}</strong></p>
+          
 
           <div className="payment-info mt-3">
             <p>Veuillez effectuer le paiement sur :</p>

@@ -76,7 +76,7 @@ const faqData = [
       {
         question: "Comment effectuer un retour ou un échange ?",
         answer:
-          "Contactez-nous via WhatsApp, email ou le formulaire de contact en précisant votre numéro de commande et la raison du retour.",
+          "Contactez-nous via WhatsApp  en précisant votre numéro de commande et la raison du retour.",
       },
       {
         question: "Les frais de retour sont-ils à ma charge ?",
@@ -111,7 +111,7 @@ const faqData = [
       {
         question: "Comment vous contacter ?",
         answer:
-          "Par WhatsApp au 771083763, ou via le formulaire de contact sur notre site.",
+          "Par WhatsApp au 771083763, ou via mail : aminastore87@gmail.com.",
       },
       {
         question: "Quels sont vos horaires ?",
@@ -131,11 +131,7 @@ const faqData = [
         answer:
           "Oui, vos données sont sécurisées et ne seront jamais partagées avec des tiers.",
       },
-      {
-        question: "Puis-je supprimer mon compte ou mes informations ?",
-        answer:
-          "Oui, contactez notre service client pour toute demande de suppression de données.",
-      },
+      
     ],
   },
 ];

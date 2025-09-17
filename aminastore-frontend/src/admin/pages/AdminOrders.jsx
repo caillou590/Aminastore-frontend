@@ -27,14 +27,33 @@ const AdminOrders = () => {
   const updateStatus = async (id, newStatus) => {
     try {
       const token = localStorage.getItem("adminToken");
-      await axios.put(`${API_BASE}/admin/orders/${id}/status`, { status: newStatus }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.put(
+        `${API_BASE}/admin/orders/${id}/status`,
+        { status: newStatus },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       setOrders(prev =>
-        prev.map(order => order._id === id ? { ...order, status: newStatus } : order)
+        prev.map(order =>
+          order._id === id ? { ...order, status: newStatus } : order
+        )
       );
     } catch (err) {
       alert(err.response?.data?.message || "Erreur lors de la mise à jour du statut");
+    }
+  };
+
+  const deleteOrder = (id) => {
+    if (!window.confirm("Voulez-vous vraiment supprimer cette commande ?")) return;
+
+    // Animation fade-out
+    const row = document.getElementById(`order-${id}`);
+    if (row) {
+      row.classList.add("fade-out");
+      setTimeout(() => {
+        setOrders(prev => prev.filter(order => order._id !== id));
+      }, 300);
+    } else {
+      setOrders(prev => prev.filter(order => order._id !== id));
     }
   };
 
@@ -50,11 +69,14 @@ const AdminOrders = () => {
 
   return (
     <div className="min-vh-100 bg-light">
-      <header className="bg-primary text-white p-3">
-        <h1 className="h5 m-0 text-center">📦 Gestion des commandes</h1>
+      {/* Header */}
+      <header className="bg-primary text-white p-3 text-center">
+        <h1 className="h5 m-0">📦 Gestion des commandes</h1>
       </header>
 
+      {/* Main */}
       <main className="p-3">
+        {/* Barre de recherche */}
         <div className="mb-3">
           <input
             type="text"
@@ -65,10 +87,14 @@ const AdminOrders = () => {
           />
         </div>
 
+        {/* Messages */}
         {loading && <p className="text-center">Chargement...</p>}
         {error && <p className="text-danger text-center">{error}</p>}
-        {!loading && filteredOrders.length === 0 && <p className="text-center">Aucune commande trouvée.</p>}
+        {!loading && filteredOrders.length === 0 && (
+          <p className="text-center">Aucune commande trouvée.</p>
+        )}
 
+        {/* Tableau */}
         {!loading && filteredOrders.length > 0 && (
           <div className="table-responsive">
             <table className="table table-bordered table-hover align-middle text-center">
@@ -76,8 +102,8 @@ const AdminOrders = () => {
                 <tr>
                   <th>Nom</th>
                   <th>Téléphone</th>
-                  <th>Adresse</th>
-                  <th>Produits</th>
+                  <th className="d-none d-md-table-cell">Adresse</th>
+                  <th className="d-none d-md-table-cell">Produits</th>
                   <th>Total</th>
                   <th>Statut</th>
                   <th>Action</th>
@@ -85,11 +111,17 @@ const AdminOrders = () => {
               </thead>
               <tbody>
                 {filteredOrders.map(order => (
-                  <tr key={order._id}>
+                  <tr key={order._id} id={`order-${order._id}`}>
                     <td>{order.customerName}</td>
                     <td>{order.customerPhone}</td>
-                    <td>{order.customerAddress}</td>
-                    <td className="text-start">
+
+                    {/* Masqué sur mobile */}
+                    <td className="d-none d-md-table-cell text-wrap">
+                      {order.customerAddress}
+                    </td>
+
+                    {/* Masqué sur mobile */}
+                    <td className="d-none d-md-table-cell text-start text-wrap">
                       <ul className="list-unstyled m-0">
                         {order.items?.map((i, idx) => (
                           <li key={idx}>
@@ -101,13 +133,15 @@ const AdminOrders = () => {
                         ))}
                       </ul>
                     </td>
+
                     <td><strong>{order.total.toLocaleString()} FCFA</strong></td>
-                    <td>{order.status}</td>
+
+                    {/* Statut + bouton en pile sur mobile */}
                     <td>
                       <select
                         value={order.status}
                         onChange={(e) => updateStatus(order._id, e.target.value)}
-                        className="form-select form-select-sm"
+                        className="form-select form-select-sm mb-2"
                       >
                         <option value="en attente">En attente</option>
                         <option value="validé">Validé</option>
@@ -116,6 +150,15 @@ const AdminOrders = () => {
                         <option value="livré">Livré</option>
                         <option value="annulé">Annulé</option>
                       </select>
+                    </td>
+
+                    <td>
+                      <button
+                        onClick={() => deleteOrder(order._id)}
+                        className="btn btn-sm btn-danger w-100"
+                      >
+                        🗑️ Supprimer
+                      </button>
                     </td>
                   </tr>
                 ))}
