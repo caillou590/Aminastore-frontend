@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AddProduct from "../components/AddProduct";
 import AdminSidebar from "../components/AdminSidebar";
-import "../../admin/admin.css";
 
 const API_BASE = import.meta.env.VITE_API_URL || "https://aminastore-ecommerce.onrender.com";
 
@@ -65,9 +64,12 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="d-flex">
+    <div className="dashboard">
+      {/* Sidebar unique */}
       <AdminSidebar />
-      <main className="flex-fill p-2 bg-light">
+
+      {/* Contenu principal */}
+      <main className="content">
         <AddProduct
           onProductAdded={handleProductAdded}
           editingProduct={editingProduct}
