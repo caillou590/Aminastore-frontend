@@ -6,7 +6,7 @@ import "../styles/Hero.css"; // importe le fichier CSS séparé
 const Hero = () => {
   return (
     <section className="hero d-flex align-items-center">
-     
+      
     </section>
   );
 };

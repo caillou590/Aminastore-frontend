@@ -1,72 +1,26 @@
-/* ======================
-   Hero Section - Overlay Gris Flou
-====================== */
 .hero {
-  background: url("../assets/fond.jpg") center center / cover no-repeat;
-  min-height: 100vh;
   position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-image: url("../assets/fond.jpg"); /* ton image */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  font-family: 'Poppins', sans-serif;
 }
 
-/* Overlay gris uniforme avec flou */
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-
-  z-index: 1;
-}
-
-/* Contenu texte */
-.hero .container {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  padding: 0 15px;
-}
-
-.hero h1 {
-  font-size: 3rem;
-  line-height: 1.2;
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  color: #fff;
-  text-shadow: 1px 1px 8px rgba(0,0,0,0.4);
-}
-
-.hero p {
-  font-size: 1.3rem;
-  color: #fff;
-  margin-top: 15px;
-  text-shadow: 1px 1px 6px rgba(0,0,0,0.3);
-}
-
-/* Bouton CTA */
-.hero .btn-cta {
-  margin-top: 25px;
-  padding: 12px 30px;
-  font-size: 1rem;
-  font-weight: 500;
-  border-radius: 30px;
-  border: none;
-  background: #06b6d4; /* accent aqua */
-  color: #fff;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.hero .btn-cta:hover {
-  background: #22d3ee;
-  transform: translateY(-2px);
-}
-
-/* Responsive */
+/* 📱 Mobile */
 @media (max-width: 768px) {
-  .hero h1 { font-size: 2.2rem; }
-  .hero p { font-size: 1rem; }
-  .hero .btn-cta { padding: 10px 20px; font-size: 0.95rem; }
+  .hero {
+    min-height: 60vh; /* réduit la hauteur sur téléphone */
+  }
+}
+
+/* 💻 Tablette */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hero {
+    min-height: 80vh; /* équilibre tablette */
+  }
 }
