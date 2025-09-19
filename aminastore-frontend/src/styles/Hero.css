@@ -17,8 +17,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-color: rgba(128, 128, 128, 0.4); /* gris semi-transparent */
-  backdrop-filter: blur(1px); /* floutter */
+
   z-index: 1;
 }
 
