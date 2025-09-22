@@ -11,6 +11,20 @@ const AdminDashboard = () => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [loadingProducts, setLoadingProducts] = useState(false);
 
+  // 🔑 Ici on gère l'ouverture/fermeture du sidebar
+  const [isOpen, setIsOpen] = useState(window.innerWidth >= 992);
+
+  const toggleSidebar = () => setIsOpen(!isOpen);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsOpen(window.innerWidth >= 992);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // --- Produits ---
   const loadProducts = async () => {
     try {
       setLoadingProducts(true);
@@ -64,12 +78,12 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="dashboard">
-      {/* Sidebar unique */}
-      <AdminSidebar />
+    <div className={`dashboard-container ${isOpen ? "sidebar-open" : "sidebar-closed"}`}>
+      {/* Sidebar contrôlée par AdminDashboard */}
+      <AdminSidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
 
       {/* Contenu principal */}
-      <main className="content">
+      <main className="dashboard-content">
         <AddProduct
           onProductAdded={handleProductAdded}
           editingProduct={editingProduct}

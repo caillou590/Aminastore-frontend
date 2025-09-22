@@ -1,44 +1,31 @@
-/*app.css 
-   Global
-====================== */
-body, html, #root {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f9f9f9;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
 /* ======================
    Dashboard Container
 ====================== */
 .dashboard-container {
   display: flex;
   min-height: 100vh;
+  background-color: #f9f9f9;
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* ======================
    Sidebar
 ====================== */
 .sidebar {
-  width: 240px;
-  background-color: #2a66f4;
+  width: 250px;           /* largeur desktop */
+  background-color: #8b5e3c; /* marron chaud pour contraste texte blanc */
   color: #fff;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  position: fixed; /* reste collée à gauche */
+  position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
-  z-index: 1000;
+  overflow-y: auto;
   transition: transform 0.3s ease-in-out;
+  z-index: 1000;
 }
 
 .sidebar h2 {
@@ -69,8 +56,8 @@ a {
 
 .sidebar li a:hover,
 .sidebar li a.active {
-  background-color: rgba(255,255,255,0.2);
-  color: #ffd700;
+  background-color: #c19a6b;
+  color: #fff;
 }
 
 /* ======================
@@ -78,7 +65,7 @@ a {
 ====================== */
 .dashboard-content {
   flex: 1;
-  margin-left: 240px; /* espace sidebar */
+  margin-left: 250px; /* espace sidebar desktop */
   padding: 20px;
   transition: margin-left 0.3s ease;
 }
@@ -91,147 +78,37 @@ a {
   position: fixed;
   top: 15px;
   left: 15px;
-  background: #2a66f4;
+  background: #c19a6b;
   color: #fff;
   border: none;
   font-size: 1.5rem;
   padding: 8px 12px;
   border-radius: 6px;
   cursor: pointer;
-  z-index: 1100;
+  z-index: 1101;
 }
 
 /* ======================
    Responsive
 ====================== */
 @media (max-width: 992px) {
-  .dashboard-content {
-    margin-left: 0;
-  }
-
   .sidebar {
-    width: 200px;
+    width: 220px;
     transform: translateX(-100%);
-  }
-
-  .sidebar.open {
-    transform: translateX(0);
-  }
-
-  .menu-btn {
-    display: block;
-  }
-}
-
-@media (max-width: 768px) {
-  .sidebar {
-    width: 100%;
     height: 100vh;
-  }
-
-  .dashboard-content {
-    margin-left: 0;
-    flex-direction: column;
-  }
-}
-/* ======================
-   Dashboard Container
-====================== */
-.dashboard-container {
-  display: flex;
-  min-height: 100vh;
-  background-color: #f9f9f9;
-  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* ======================
-   Sidebar
-====================== */
-.sidebar {
-  width: 240px;           /* largeur desktop */
-  background-color: #2a66f4;
-  color: #fff;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  transition: all 0.3s ease-in-out;
-  z-index: 1000;
-}
-
-.sidebar h2 {
-  margin: 0 0 20px 0;
-  font-size: 1.5rem;
-  text-align: center;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.sidebar li {
-  padding: 12px 0;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.sidebar li:hover {
-  color: #ffd700;
-}
-
-/* ======================
-   Contenu principal
-====================== */
-.dashboard-content {
-  flex: 1;
-  margin-left: 240px; /* espace sidebar desktop */
-  padding: 20px;
-  transition: margin-left 0.3s ease;
-}
-
-/* ======================
-   Menu mobile
-====================== */
-.menu-btn {
-  display: none;
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  background: #2a66f4;
-  color: #fff;
-  border: none;
-  font-size: 1.5rem;
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  z-index: 1100;
-}
-
-/* ======================
-   Responsive
-====================== */
-@media (max-width: 992px) {
-  .sidebar {
-    width: 200px;
-    transform: translateX(-100%);
+    position: fixed;
   }
 
   .sidebar.open {
     transform: translateX(0);
   }
 
-  .menu-btn {
-    display: block;
-  }
-
   .dashboard-content {
     margin-left: 0;
+  }
+
+  .menu-btn {
+    display: block;
   }
 }
 

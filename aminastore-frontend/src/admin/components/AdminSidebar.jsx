@@ -1,17 +1,12 @@
-// src/admin/components/AdminSidebar.jsx
-import React, { useState } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { FaTachometerAlt, FaBoxOpen, FaShoppingCart, FaBars } from "react-icons/fa";
 import "../../admin/admin.css";
 
-const AdminSidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleSidebar = () => setIsOpen(!isOpen);
-
+const AdminSidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <>
-      {/* Bouton hamburger mobile */}
+      {/* Bouton hamburger */}
       <button className="menu-btn" onClick={toggleSidebar}>
         <FaBars />
       </button>
@@ -21,29 +16,17 @@ const AdminSidebar = () => {
         <h2>Aminastore</h2>
         <ul>
           <li>
-            <NavLink
-              to="/admin/dashboard"
-              className={({ isActive }) => isActive ? "active" : ""}
-              onClick={() => setIsOpen(false)}
-            >
+            <NavLink to="/admin/dashboard" onClick={() => window.innerWidth < 992 && toggleSidebar()}>
               <FaTachometerAlt /> Dashboard
             </NavLink>
           </li>
           <li>
-            <NavLink
-              to="/admin/products"
-              className={({ isActive }) => isActive ? "active" : ""}
-              onClick={() => setIsOpen(false)}
-            >
+            <NavLink to="/admin/products" onClick={() => window.innerWidth < 992 && toggleSidebar()}>
               <FaBoxOpen /> Produits
             </NavLink>
           </li>
           <li>
-            <NavLink
-              to="/admin/orders"
-              className={({ isActive }) => isActive ? "active" : ""}
-              onClick={() => setIsOpen(false)}
-            >
+            <NavLink to="/admin/orders" onClick={() => window.innerWidth < 992 && toggleSidebar()}>
               <FaShoppingCart /> Commandes
             </NavLink>
           </li>

@@ -1,9 +1,10 @@
+// src/pages/Cart.jsx
 import React from "react";
 import { useCart } from "../context/CartContext.jsx";
 import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
-  const { cartItems, updateQuantity, removeFromCart, totalPrice } = useCart();
+  const { cartItems, updateQuantity, removeFromCart, totalPrice, updateTaille } = useCart();
   const navigate = useNavigate();
 
   if (!cartItems || cartItems.length === 0) {
@@ -17,8 +18,8 @@ const Cart = () => {
     );
   }
 
-  const handleTailleChange = (productId, newTaille) => {
-    updateQuantity(productId, cartItems.find(item => item._id === productId && item.taille === newTaille)?.quantity || 1, newTaille);
+  const handleTailleChange = (productId, oldTaille, newTaille) => {
+    updateTaille(productId, oldTaille, newTaille);
   };
 
   return (
@@ -36,11 +37,13 @@ const Cart = () => {
                 <select
                   className="form-select d-inline-block w-auto ms-2"
                   value={item.taille || ""}
-                  onChange={(e) => handleTailleChange(item._id, e.target.value)}
+                  onChange={(e) => handleTailleChange(item._id, item.taille, e.target.value)}
                 >
                   <option value="">-- Taille --</option>
                   {item.tailles.map((t) => (
-                    <option key={t} value={t}>{t}</option>
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
                   ))}
                 </select>
               )}

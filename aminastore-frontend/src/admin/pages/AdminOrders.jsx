@@ -45,7 +45,6 @@ const AdminOrders = () => {
   const deleteOrder = (id) => {
     if (!window.confirm("Voulez-vous vraiment supprimer cette commande ?")) return;
 
-    // Animation fade-out
     const row = document.getElementById(`order-${id}`);
     if (row) {
       row.classList.add("fade-out");
@@ -68,7 +67,7 @@ const AdminOrders = () => {
   );
 
   return (
-    <div className="min-vh-100 bg-light">
+    <div className="dashboard-content"> {/* ✅ Correction ici */}
       {/* Header */}
       <header className="bg-primary text-white p-3 text-center">
         <h1 className="h5 m-0">📦 Gestion des commandes</h1>
@@ -115,12 +114,10 @@ const AdminOrders = () => {
                     <td>{order.customerName}</td>
                     <td>{order.customerPhone}</td>
 
-                    {/* Masqué sur mobile */}
                     <td className="d-none d-md-table-cell text-wrap">
                       {order.customerAddress}
                     </td>
 
-                    {/* Masqué sur mobile */}
                     <td className="d-none d-md-table-cell text-start text-wrap">
                       <ul className="list-unstyled m-0">
                         {order.items?.map((i, idx) => (
@@ -136,7 +133,6 @@ const AdminOrders = () => {
 
                     <td><strong>{order.total.toLocaleString()} FCFA</strong></td>
 
-                    {/* Statut + bouton en pile sur mobile */}
                     <td>
                       <select
                         value={order.status}

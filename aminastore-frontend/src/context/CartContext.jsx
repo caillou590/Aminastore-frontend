@@ -48,6 +48,32 @@ export const CartProvider = ({ children }) => {
     );
   };
 
+  // 🔥 Changer la taille d’un produit
+  const updateTaille = (productId, oldTaille, newTaille) => {
+    setCartItems((prev) => {
+      const existing = prev.find(
+        (item) => item._id === productId && item.taille === newTaille
+      );
+
+      return prev
+        .map((item) => {
+          if (item._id === productId && item.taille === oldTaille) {
+            if (existing) {
+              // Fusionner si la nouvelle taille existe déjà
+              return { ...item, quantity: item.quantity + existing.quantity, taille: newTaille };
+            } else {
+              return { ...item, taille: newTaille };
+            }
+          }
+          return item;
+        })
+        .filter(
+          (item, index, self) =>
+            index === self.findIndex((t) => t._id === item._id && t.taille === item.taille)
+        );
+    });
+  };
+
   // Supprimer un produit
   const removeFromCart = (productId, taille = null) => {
     setCartItems(
@@ -61,7 +87,7 @@ export const CartProvider = ({ children }) => {
   // Total du panier
   const totalPrice = cartItems.reduce((acc, item) => acc + item.prix * item.quantity, 0);
 
-  // Nombre total d'articles pour la pastille
+  // Nombre total d'articles
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
@@ -70,10 +96,11 @@ export const CartProvider = ({ children }) => {
         cartItems,
         addToCart,
         updateQuantity,
+        updateTaille, // 👈 ajout ici
         removeFromCart,
         clearCart,
         totalPrice,
-        totalItems, // 👈 pour la pastille
+        totalItems,
       }}
     >
       {children}

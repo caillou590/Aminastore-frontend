@@ -1,40 +1,27 @@
-/* ======================
-   Dashboard Container
-====================== */
+/* Container */
 .dashboard-container {
   display: flex;
   min-height: 100vh;
   background-color: #f9f9f9;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  overflow-x: hidden; /* empêche le scroll horizontal */
+  overflow-x: hidden;
+  transition: all 0.3s ease;
 }
 
-/* Contenu principal */
-.dashboard-content {
-  flex: 1;
-  margin-left: 240px; /* largeur sidebar desktop */
-  padding: 20px;
-  transition: margin-left 0.3s ease;
-  min-width: 0; /* important pour que le contenu flex s'adapte */
-}
-
-/* ======================
-   Sidebar
-====================== */
+/* Sidebar */
 .sidebar {
   width: 240px;
-  background-color: #2a66f4;
+  background-color: #8b5e3c; /* marron contrasté */
   color: #fff;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
-  bottom: 0;
-  transform: translateX(0);
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease;
   z-index: 1000;
 }
 
@@ -48,10 +35,6 @@
   list-style: none;
   padding: 0;
   margin: 0;
-}
-
-.sidebar li {
-  padding: 12px 0;
 }
 
 .sidebar li a {
@@ -71,164 +54,52 @@
   color: #ffd700;
 }
 
-/* Bouton menu mobile */
+/* Contenu principal */
+.dashboard-content {
+  flex: 1;
+  padding: 20px;
+  min-width: 0;
+  transition: margin-left 0.3s ease;
+  margin-left: 240px; /* Décalage par défaut sur desktop */
+}
+
+/* Bouton burger */
 .menu-btn {
-  display: none;
   position: fixed;
   top: 15px;
   left: 15px;
-  background: #2a66f4;
+  z-index: 1101;
+  background-color: #8b5e3c;
   color: #fff;
   border: none;
-  font-size: 1.5rem;
   padding: 8px 12px;
+  font-size: 1.5rem;
   border-radius: 6px;
   cursor: pointer;
-  z-index: 1100;
+  display: none; /* Masqué sur PC */
 }
 
-/* ======================
-   Product List
-====================== */
-.product-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-}
-
-/* Product Card */
-.product-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
-}
-
-.product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.product-card img,
-.product-card video {
-  width: 100%;
-  max-height: 200px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  background: #fff;
-}
-
-/* Action Buttons */
-.actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.actions .edit {
-  flex: 1;
-  padding: 8px;
-  background-color: #2a66f4;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.actions .edit:hover {
-  background-color: #1e4dc1;
-}
-
-.actions .delete {
-  flex: 1;
-  padding: 8px;
-  background-color: #e63946;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.actions .delete:hover {
-  background-color: #b0232f;
-}
-
-/* ======================
-   AddProduct Form
-====================== */
-.card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.card h4 {
-  margin-bottom: 15px;
-}
-
-.card input,
-.card textarea,
-.card select {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  width: 100%;
-}
-
-.card input[type="file"] {
-  margin-top: 5px;
-  margin-bottom: 10px;
-}
-
-.card button {
-  cursor: pointer;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 1rem;
-}
-
-.card img,
-.card video {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-top: 5px;
-}
-
-/* ======================
-   Responsive
-====================== */
+/* Responsive */
 @media (max-width: 992px) {
-  .dashboard-content {
-    margin-left: 0; /* prend toute la largeur quand sidebar est masquée */
-  }
-
   .sidebar {
-    width: 200px;
+    width: 220px;
     transform: translateX(-100%);
   }
 
   .sidebar.open {
     transform: translateX(0);
-    position: fixed;
-    z-index: 1000;
+  }
+
+  .dashboard-content {
+    margin-left: 0; /* Pas de décalage sur mobile */
   }
 
   .menu-btn {
-    display: block;
+    display: block; /* Affiché uniquement sur mobile */
   }
 }
 
 @media (max-width: 768px) {
-  .product-card img,
-  .product-card video {
-    max-height: 150px;
-  }
-
   .sidebar {
     width: 100%;
     height: 100vh;
@@ -238,10 +109,4 @@
     flex-direction: column;
   }
 }
-.product-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
-} 
+ 
